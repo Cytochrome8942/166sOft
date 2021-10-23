@@ -9,8 +9,10 @@ public class GameManager : MonoBehaviour
     public CameraControl cameraControl;
     public CharacterControl characterControl;
 
+    public CharacterInfo playerInfo;
+
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         instance = this;
     }

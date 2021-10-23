@@ -13,39 +13,70 @@ public class MinionMove : MonoBehaviour
 
 	public SphereCollider rangeCollider;
 
-	private Transform target;
-
 	private int currentPath;
 
 	private NavMeshAgent navMeshAgent;
 
 	private void Update()
 	{
-		if(target != null)
+		if(minionInfo.target != null)
 		{
-			navMeshAgent.SetDestination(target.position.YZero());
-
-			if(target.CompareTag("Path") && Vector3.Distance(target.position, transform.position) < 1f)
+			if (minionInfo.target.CompareTag("Path"))
 			{
-				currentPath++;
-				target = path[currentPath].transform;
+				navMeshAgent.SetDestination(minionInfo.target.position.YZero());
+				if (Vector3.Distance(minionInfo.target.position, transform.position) < 2f && currentPath < path.Length - 1)
+				{
+					currentPath++;
+					minionInfo.target = path[currentPath].transform;
+				}
+			}
+			else // path가 아닐경우 stoppingDistance를 설정해서 사거리까지만 이동하도록 한다
+			{
+				if (Vector3.Distance(minionInfo.target.position, transform.position) < minionInfo.attackRange && !minionInfo.attacking)
+				{
+					minionInfo.attacking = true;
+					navMeshAgent.SetDestination(transform.position.YZero());
+				}
+				else if(!minionInfo.attacking)
+				{
+					navMeshAgent.SetDestination(minionInfo.target.position.YZero());
+				}
 			}
 		}
 	}
 
-	public void Die()
+	public void SetNearestPath()
 	{
-		target = null;
+		int best = 0;
+		float bestDistance = Mathf.Infinity;
+		for(int i=0; i<path.Length; i++)
+		{
+			float tmpDist = Vector3.Distance(transform.position, path[i].transform.position);
+			if (tmpDist < bestDistance)
+			{
+				bestDistance = tmpDist;
+				best = i;
+			}
+		}
+		// 가장 가까운 경로의 다음 경로로 이동함(뒤로 돌아가는 현상 방지)
+		currentPath = best + 1;
+		minionInfo.target = path[currentPath].transform;
+	}
+
+	private void Die()
+	{
+		minionInfo.target = null;
 		navMeshAgent.enabled = false;
 	}
 
 	public void Initialize(MinionInfo minionInfo)
 	{
 		this.minionInfo = minionInfo;
-		navMeshAgent = GetComponent<NavMeshAgent>();
+		navMeshAgent = GetComponentInParent<NavMeshAgent>();
 		navMeshAgent.enabled = true;
 		rangeCollider.radius = minionInfo.targetRange;
-		target = path[1].transform;
+		minionInfo.target = path[1].transform;
 		currentPath = 1;
+		minionInfo.deathEvent.AddListener(Die);
 	}
 }

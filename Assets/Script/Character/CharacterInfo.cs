@@ -5,7 +5,11 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "ScriptableObject/CharacterInfo")]
 public class CharacterInfo : ScriptableObject
 {
-    public float hp = 100;
+    // 캐릭터 고유번호
+    public int team = 1;
+
+    public float fullHp = 1000;
+    public float hp = 1000;
     public float attackRange = 5;
     public float attackSpeed = 0.8f;
     public float attackSpeedBefore = 0.2f; // 선딜

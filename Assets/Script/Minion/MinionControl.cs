@@ -5,6 +5,7 @@ using UnityEngine;
 public class MinionControl : MonoBehaviour
 {
 	private MinionInfo minionInfo;
+	public MinionInfo setInfo;
     private cakeslice.Outline outline;
 	private CapsuleCollider minionCollider;
 
@@ -12,23 +13,34 @@ public class MinionControl : MonoBehaviour
 
 	private MinionMove minionMove;
 
+	public MinionSensor minionSensor;
+
+	public MinionAttack minionAttack;
+
 	Coroutine dieCoroutine;
 
+	private bool targetable = true;
+
 	// 시간에 따른 체력 및 공격력 변화
-	public void Initialize(GameObject[] path)
+	public void Initialize(GameObject[] path, int team)
 	{
-		minionInfo = ScriptableObject.CreateInstance<MinionInfo>();
+		minionInfo = Instantiate(setInfo);
+		minionInfo.team = team;
 
 		// *** N배
 
 		minionHpBar.Initialize(minionInfo);
 
-		outline = GetComponent<cakeslice.Outline>();
+		outline = GetComponentInChildren<cakeslice.Outline>();
 		minionCollider = GetComponent<CapsuleCollider>();
+
 		minionMove = GetComponent<MinionMove>();
 		minionMove.path = path;
 		minionMove.Initialize(minionInfo);
 
+		minionAttack.Initialize(minionInfo);
+
+		minionSensor.Initialize(minionInfo);
 	}
 
 	public void Damaged(float damage)
@@ -43,15 +55,24 @@ public class MinionControl : MonoBehaviour
 	private IEnumerator Die()
 	{
 		// 사망 애니메이션
+		minionInfo.deathEvent.Invoke();
+		targetable = false;
 		minionCollider.enabled = false;
-		minionMove.Die();
 		yield return new WaitForSeconds(0.5f);
 		Destroy(gameObject);
 	}
 
+	public bool IsEnemy(int target)
+	{
+		return minionInfo.team.IsEnemy(target);
+	}
+
 	private void OnMouseOver()
 	{
-        outline.eraseRenderer = false;
+		if (targetable && GameManager.instance.playerInfo.team.IsEnemy(minionInfo.team))
+		{
+			outline.eraseRenderer = false;
+		}
 	}
 
 	private void OnMouseExit()

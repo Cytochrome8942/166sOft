@@ -23,4 +23,9 @@ public static class MacroMethod
 	{
 		return GeometryUtility.TestPlanesAABB(GeometryUtility.CalculateFrustumPlanes(camera), renderer.bounds);
 	}
+
+	public static bool IsEnemy(this int target1, int target2)
+	{
+		return target1 % 2 != target2 % 2;
+	}
 }

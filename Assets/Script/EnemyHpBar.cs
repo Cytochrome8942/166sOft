@@ -8,14 +8,14 @@ public class EnemyHpBar : MonoBehaviour
     protected float fullHp;
     protected float currentHp;
     public Image hpBarImage;
-    MeshRenderer enemyRenderer;
+    private MeshRenderer[] enemyRenderer;
 
     private Camera mainCamera;
 
     void Awake()
     {
         mainCamera = Camera.main;
-        enemyRenderer = GetComponentInParent<MeshRenderer>();
+        enemyRenderer = transform.parent.GetComponentsInChildren<MeshRenderer>();
     }
 
     protected void Init()
@@ -27,7 +27,7 @@ public class EnemyHpBar : MonoBehaviour
     protected virtual void Update()
     {
         // 체력이 닳았고, 화면에 보일때만 출력
-        if (currentHp < fullHp && currentHp > 0 && mainCamera.IsObjectVisible(enemyRenderer))
+        if (currentHp < fullHp && currentHp > 0 && mainCamera.IsObjectVisible(enemyRenderer[0]))
         {
             GetComponent<Canvas>().enabled = true;
             hpBarImage.fillAmount = currentHp / fullHp;

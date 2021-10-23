@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 814ddefef00cf9f4b909fffdadc2d969, type: 3}
-  m_Name: MinionInfo
+  m_Name: MinionInfoCaster
   m_EditorClassIdentifier: 
   hp: 100
-  attackSpeed: 0
-  attackRange: 0
-  targetRange: 0
-  attackDamage: 0
+  attackSpeed: 1
+  attackRange: 7
+  targetRange: 7
+  attackDamage: 10
+  attacking: 0

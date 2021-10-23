@@ -9,6 +9,7 @@ TagManager:
   - Minion
   - Ground
   - Path
+  - Sensor
   layers:
   - Default
   - TransparentFX

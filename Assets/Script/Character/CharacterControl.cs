@@ -10,9 +10,12 @@ public class CharacterControl : MonoBehaviour
 
 	public CharacterInfo characterInfo;
 
+	private int layermask = ~(1 << 2);
+
 	void Awake()
 	{
 		characterInfo.moveTarget = transform.position.YZero();
+		characterInfo.hp = characterInfo.fullHp;
 
 		characterMove = GetComponent<CharacterMove>();
 		characterMove.characterInfo = characterInfo;
@@ -25,21 +28,59 @@ public class CharacterControl : MonoBehaviour
 
 	public void RightClickInput(Vector3 mousePosition)
 	{
-		var hit = GetHit(mousePosition);
+		// RaycastAll은 순서를 보장하지 않기 때문에 우선순위에 따라 따로 판정해야함
 
-		if (hit.transform.CompareTag("Ground"))
+		Ray ray = Camera.main.ScreenPointToRay(mousePosition);
+
+		Debug.DrawRay(ray.origin, ray.direction * 50, Color.red, 5f);
+
+
+		while (true)
 		{
-			characterMove.MoveTo(hit);
-		}
-		if (hit.transform.CompareTag("Minion") || hit.transform.CompareTag("Enemy"))
-		{
-			characterAttack.AttackTargetSet(hit.transform);
+			// 뭔가에 부딪혔다면
+			if (Physics.Raycast(ray, out RaycastHit hit, 50f, layermask))
+			{
+				if (hit.transform.CompareTag("Enemy"))
+				{
+					// 피아식별
+					characterAttack.AttackTargetSet(hit.transform);
+					break;
+				}
+				else if (hit.transform.CompareTag("Minion"))
+				{
+					//피아식별
+					if (hit.transform.GetComponent<MinionControl>().IsEnemy(characterInfo.team))
+					{
+						characterAttack.AttackTargetSet(hit.transform);
+						break;
+					}
+					else
+					{
+						ray = new Ray(hit.point, ray.direction);
+						continue;
+					}
+				}
+				else if (hit.transform.CompareTag("Ground"))
+				{
+					characterMove.MoveTo(hit);
+					return;
+				}
+			}
+			else
+			{
+				break;
+			}
 		}
 	}
 
 	public void SkillRange(bool on)
 	{
 
+	}
+
+	public void Damaged(float damage)
+	{
+		characterInfo.hp -= damage;
 	}
 
 	public IEnumerator SkillShoot(Vector3 mousePosition, int skillNumber)
@@ -60,14 +101,9 @@ public class CharacterControl : MonoBehaviour
 		Instantiate(skillEffect[skillNumber], skillEffect[skillNumber].transform.position, skillEffect[skillNumber].transform.rotation).Play();*/
 	}
 
-	private RaycastHit GetHit(Vector3 mousePosition)
+
+	public bool IsEnemy(int target)
 	{
-		Ray ray = Camera.main.ScreenPointToRay(mousePosition);
-
-		Debug.DrawRay(ray.origin, ray.direction * 50, Color.red, 5f);
-
-		Physics.Raycast(ray, out RaycastHit hit, 50f);
-
-		return hit;
+		return characterInfo.team.IsEnemy(target);
 	}
 }

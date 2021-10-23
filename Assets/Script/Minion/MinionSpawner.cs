@@ -12,9 +12,16 @@ public class MinionSpawner : MonoBehaviour
     public float spawnTime = 1f;
     public float waveTime = 15f;
 
-    public int minionCount = 6;
+    private int minionCount = 7;
 
-    public GameObject minion;
+    public GameObject minionMelee;
+    public GameObject minionSiege;
+    public GameObject minionCaster;
+
+    public GameObject casterBulletHolder;
+    public GameObject siegeBulletHolder;
+
+    public int team;
 
 
     // Update is called once per frame
@@ -39,8 +46,22 @@ public class MinionSpawner : MonoBehaviour
                 spawnClock += Time.deltaTime;
                 yield return null;
 			}
-            var newMinion = Instantiate(minion, spawnPath[0].transform.position, transform.rotation, transform);
-            newMinion.GetComponentInChildren<MinionControl>().Initialize(spawnPath);
-		}
+            GameObject newMinion = null;
+            if (i < 3)
+            {
+                newMinion = Instantiate(minionMelee, spawnPath[0].transform.position, transform.rotation, transform);
+            }
+            else if(i == 3)
+            {
+                newMinion = Instantiate(minionSiege, spawnPath[0].transform.position, transform.rotation, transform);
+                newMinion.GetComponentInChildren<MinionSiegeAttack>().siegeBulletHolder = siegeBulletHolder;
+            }
+			else
+            {
+                newMinion = Instantiate(minionCaster, spawnPath[0].transform.position, transform.rotation, transform);
+                newMinion.GetComponentInChildren<MinionCasterAttack>().casterBulletHolder = casterBulletHolder;
+            }
+            newMinion.GetComponentInChildren<MinionControl>().Initialize(spawnPath, team);
+        }
 	}
 }
