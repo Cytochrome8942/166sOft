@@ -40,19 +40,24 @@ public class CharacterControl : MonoBehaviour
 			// 뭔가에 부딪혔다면
 			if (Physics.Raycast(ray, out RaycastHit hit, 50f, layermask))
 			{
-				if (hit.transform.CompareTag("Enemy"))
+				if (hit.transform.CompareTag("Minion"))
 				{
-					// 피아식별
-					characterAttack.AttackTargetSet(hit.transform);
-					break;
-				}
-				else if (hit.transform.CompareTag("Minion"))
-				{
-					//피아식별
 					if (hit.transform.GetComponent<MinionControl>().IsEnemy(characterInfo.team))
 					{
 						characterAttack.AttackTargetSet(hit.transform);
 						break;
+					}
+					else
+					{
+						ray = new Ray(hit.point, ray.direction);
+						continue;
+					}
+				}
+				else if (hit.transform.CompareTag("Player"))
+				{
+					if (hit.transform.GetComponent<CharacterControl>().IsEnemy(characterInfo.team))
+					{
+						characterAttack.AttackTargetSet(hit.transform);
 					}
 					else
 					{
