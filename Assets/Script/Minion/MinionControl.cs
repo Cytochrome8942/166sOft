@@ -17,6 +17,8 @@ public class MinionControl : MonoBehaviour
 
 	public MinionAttack minionAttack;
 
+	private const int PLAYER = 1 << 3;
+
 	Coroutine dieCoroutine;
 
 	private bool targetable = true;
@@ -58,6 +60,24 @@ public class MinionControl : MonoBehaviour
 		minionInfo.deathEvent.Invoke();
 		targetable = false;
 		minionCollider.enabled = false;
+		// 경험치 분배
+		Collider[] targets = new Collider[10];
+		int colliderAmount = Physics.OverlapSphereNonAlloc(transform.position.YZero(), minionInfo.expRange, targets, PLAYER, QueryTriggerInteraction.Collide);
+		List<CharacterControl> enemies = new List<CharacterControl>();
+		for(int i=0; i<colliderAmount; i++)
+		{
+			var control = targets[i].transform.GetComponentInParent<CharacterControl>();
+			// 적일때만 경험치 부여
+			if (control.IsEnemy(minionInfo.team))
+			{
+				enemies.Add(control);
+			}
+		}
+		for(int i=0; i<enemies.Count; i++)
+		{
+			enemies[i].ExpGet(minionInfo.exp / colliderAmount);
+		}
+
 		yield return new WaitForSeconds(0.5f);
 		Destroy(gameObject);
 	}

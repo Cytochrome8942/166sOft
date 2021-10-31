@@ -35,7 +35,7 @@ public abstract class MinionAttack : MonoBehaviour
 	protected IEnumerator Rotate()
 	{
 		var startRotation = transform.rotation;
-		var targetRotation = Quaternion.LookRotation((minionInfo.target.position - transform.position).YZero());
+		var targetRotation = Quaternion.LookRotation(minionInfo.target.position.YZero() - transform.position.YZero());
 
 		float clock = 0f;
 		while (clock < 1f)

@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class EnemyHpBar : MonoBehaviour
+public class HpBar : MonoBehaviour
 {
-    protected float fullHp;
-    protected float currentHp;
+    public float fullHp;
+    public float currentHp;
     public Image hpBarImage;
-    private MeshRenderer[] enemyRenderer;
+    private MeshRenderer currentRenderer;
 
     private Camera mainCamera;
 
     void Awake()
     {
         mainCamera = Camera.main;
-        enemyRenderer = transform.parent.GetComponentsInChildren<MeshRenderer>();
+        currentRenderer = transform.parent.GetComponentInChildren<MeshRenderer>();
     }
 
     protected void Init()
@@ -27,7 +27,7 @@ public class EnemyHpBar : MonoBehaviour
     protected virtual void Update()
     {
         // 체력이 닳았고, 화면에 보일때만 출력
-        if (currentHp < fullHp && currentHp > 0 && mainCamera.IsObjectVisible(enemyRenderer[0]))
+        if (currentHp < fullHp && currentHp > 0 && mainCamera.IsObjectVisible(currentRenderer))
         {
             GetComponent<Canvas>().enabled = true;
             hpBarImage.fillAmount = currentHp / fullHp;

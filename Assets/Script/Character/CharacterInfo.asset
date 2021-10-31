@@ -12,11 +12,48 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c98c9f4a8a9c6e4697da2677f2db0ae, type: 3}
   m_Name: CharacterInfo
   m_EditorClassIdentifier: 
+  mobadata: {fileID: 4900000, guid: cda4b27bfb6c08c47a1e0e40e4a398b9, type: 3}
   team: 1
-  hp: 1000
-  attackRange: 5
-  attackSpeed: 0.8
-  attackSpeedBefore: 0.2
-  attackDamage: 10
-  moveSpeed: 5
+  exp: {fileID: 11400000, guid: 14af76386bc191b4cadccfe5fd9d084d, type: 2}
+  expMax: {fileID: 11400000, guid: 7808b1c73178d6f4b92729a2bb2700c4, type: 2}
+  level: {fileID: 11400000, guid: c76f6d05b380f1e4b9abcaf83422d4d2, type: 2}
+  fullHp: {fileID: 11400000, guid: b29be693d2df92e4e926c0edc704967f, type: 2}
+  hp: {fileID: 11400000, guid: 9e3cf4c74103fe040a1eab8f0e36efd2, type: 2}
+  fullMp: {fileID: 11400000, guid: e40601ed935124449869e5b1c0d4d081, type: 2}
+  mp: {fileID: 11400000, guid: ea74d5a57300dd2468ce2a086f04b7a4, type: 2}
+  hpRegen: {fileID: 11400000, guid: 039b77da11c30974a939b4176a1e098f, type: 2}
+  mpRegen: {fileID: 11400000, guid: 95a2bbd647be781428056ee4be6eb95a, type: 2}
+  isPhysical: 1
+  physicalAttack: {fileID: 11400000, guid: cfa1230117247fa4b962e6d5e2b2051a, type: 2}
+  physicalDefence: {fileID: 11400000, guid: b799fadf2d3188a4ba392d041fdcfd9f, type: 2}
+  magicalAttack: {fileID: 11400000, guid: cf7d5a0d1abde2b4b8b2450ec03040e6, type: 2}
+  magicalDefence: {fileID: 11400000, guid: 7259c273696f09c4dbc09c21fafb94a8, type: 2}
+  isMelee: 0
+  meleeRange: 1
+  distancedRange: 4
+  attackSpeed: {fileID: 11400000, guid: b07a4a29d86895b41a35a580df792903, type: 2}
+  attackSpeedAfter: 0.52
+  attackSpeedBefore: 0.13
+  moveSpeed: 3
   rotateSpeed: 1000
+  levelData:
+  - "100\t500\t200\t100\t0.8\t0.5\t40\t20\t40\t20\t100\t400\t300\t0.65\r"
+  - "125\t550\t250\t100\t1\t0.6\t45\t25\t45\t25\t100\t400\t302\t0.64\r"
+  - "150\t600\t300\t100\t1.2\t0.7\t50\t30\t50\t30\t100\t400\t304\t0.63\r"
+  - "200\t650\t350\t100\t1.5\t0.8\t55\t35\t55\t35\t100\t400\t306\t0.62\r"
+  - "300\t700\t400\t100\t2\t0.9\t60\t40\t60\t40\t100\t400\t308\t0.61\r"
+  - "400\t750\t500\t110\t2.1\t1\t70\t45\t70\t45\t100\t400\t310\t0.6\r"
+  - "500\t775\t520\t110\t2.2\t1.2\t75\t50\t75\t50\t100\t400\t310.5\t0.595\r"
+  - "600\t800\t540\t110\t2.3\t1.4\t80\t52.5\t80\t52.5\t100\t400\t311\t0.59\r"
+  - "700\t825\t560\t110\t2.4\t1.6\t85\t55\t85\t55\t100\t400\t311.5\t0.585\r"
+  - "800\t850\t580\t120\t2.5\t1.8\t90\t57.5\t90\t57.5\t100\t400\t312\t0.58\r"
+  - "900\t875\t600\t120\t2.6\t2\t95\t60\t95\t60\t100\t400\t313\t0.575\r"
+  - "1000\t900\t600\t120\t2.7\t2\t100\t62.5\t100\t62.5\t100\t400\t314\t0.565\r"
+  - "1000\t925\t600\t120\t2.8\t2\t105\t65\t105\t65\t100\t400\t315\t0.56\r"
+  - "1000\t950\t600\t120\t2.9\t2\t110\t67.5\t110\t67.5\t100\t400\t316\t0.555\r"
+  - "1000\t1000\t600\t130\t3\t2\t115\t70\t115\t70\t100\t400\t317\t0.55\r"
+  - "1000\t1100\t600\t130\t3\t2\t115\t70\t115\t70\t100\t400\t318\t0.5\r"
+  - "1000\t1200\t600\t130\t3\t2\t120\t75\t120\t75\t100\t400\t319\t0.5\r"
+  - "1000\t1300\t600\t130\t3\t2\t120\t80\t120\t80\t100\t400\t320\t0.5\r"
+  - "1000\t1400\t600\t130\t3\t2\t125\t80\t125\t80\t100\t400\t320\t0.5\r"
+  - "1000\t1500\t600\t130\t3\t2\t130\t90\t130\t90\t100\t400\t325\t0.48\r"

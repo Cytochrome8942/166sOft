@@ -14,8 +14,9 @@ public class CharacterControl : MonoBehaviour
 
 	void Awake()
 	{
+		characterInfo.Reset();
+
 		characterInfo.moveTarget = transform.position.YZero();
-		characterInfo.hp = characterInfo.fullHp;
 
 		characterMove = GetComponent<CharacterMove>();
 		characterMove.characterInfo = characterInfo;
@@ -23,6 +24,7 @@ public class CharacterControl : MonoBehaviour
 		characterAttack.characterInfo = characterInfo;
 		characterSkill = GetComponent<CharacterSkill>();
 		characterSkill.characterInfo = characterInfo;
+		GetComponent<CharacterLevel>().characterInfo = characterInfo;
 	}
 
 
@@ -35,12 +37,12 @@ public class CharacterControl : MonoBehaviour
 		Debug.DrawRay(ray.origin, ray.direction * 50, Color.red, 5f);
 
 
-		while (true)
+		for (int i = 0; i<5; i++)
 		{
 			// ¹º°¡¿¡ ºÎµúÇû´Ù¸é
 			if (Physics.Raycast(ray, out RaycastHit hit, 50f, layermask))
 			{
-				if (hit.transform.CompareTag("Minion"))
+				if (hit.transform.CompareTag("Minion")) // 2¼øÀ§
 				{
 					if (hit.transform.GetComponent<MinionControl>().IsEnemy(characterInfo.team))
 					{
@@ -53,11 +55,12 @@ public class CharacterControl : MonoBehaviour
 						continue;
 					}
 				}
-				else if (hit.transform.CompareTag("Player"))
+				else if (hit.transform.CompareTag("Player")) // 1¼øÀ§
 				{
 					if (hit.transform.GetComponent<CharacterControl>().IsEnemy(characterInfo.team))
 					{
 						characterAttack.AttackTargetSet(hit.transform);
+						break;
 					}
 					else
 					{
@@ -65,10 +68,15 @@ public class CharacterControl : MonoBehaviour
 						continue;
 					}
 				}
-				else if (hit.transform.CompareTag("Ground"))
+				else if (hit.transform.CompareTag("Ground")) // 3¼øÀ§
 				{
 					characterMove.MoveTo(hit);
-					return;
+					break;
+				}
+				else
+				{
+					ray = new Ray(hit.point, ray.direction);
+					continue;
 				}
 			}
 			else
@@ -83,9 +91,14 @@ public class CharacterControl : MonoBehaviour
 
 	}
 
+	public void ExpGet(float amount)
+	{
+		characterInfo.exp.add(amount);
+	}
+
 	public void Damaged(float damage)
 	{
-		characterInfo.hp -= damage;
+		characterInfo.hp.set(characterInfo.hp.get() - damage);
 	}
 
 	public IEnumerator SkillShoot(Vector3 mousePosition, int skillNumber)

@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 814ddefef00cf9f4b909fffdadc2d969, type: 3}
   m_Name: MinionInfoMelee
   m_EditorClassIdentifier: 
-  hp: 100
-  attackSpeed: 1
-  attackRange: 2
-  targetRange: 7
-  attackDamage: 10
+  hp: 400
+  attackSpeed: 1.2
+  attackRange: 0.9
+  targetRange: 6
+  attackDamage: 25
   attacking: 0

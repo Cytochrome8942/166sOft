@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MinionHpBar : EnemyHpBar
+public class MinionHpBar : HpBar
 {
 	private MinionInfo minionInfo;
 

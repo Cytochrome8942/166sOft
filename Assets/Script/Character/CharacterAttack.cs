@@ -26,20 +26,20 @@ public class CharacterAttack : MonoBehaviour
 	private void Update()
 	{
 		// 타겟 있음, 사거리 이내, 공격가능 : 공격
-		if (target != null && Vector3.Distance(transform.position.YZero(), target.position.YZero()) < characterInfo.attackRange 
+		if (target != null && Vector3.Distance(transform.position.YZero(), target.position.YZero()) < characterInfo.distancedRange 
 			&& characterInfo.attackClock > 0f)
 		{
-			characterInfo.attackClock = -characterInfo.attackSpeed;
+			characterInfo.attackClock = -characterInfo.attackSpeedAfter;
 			attackCoroutine = StartCoroutine(AttackTarget());
 		}
 		// 타겟 있음, 사거리 이내, 공격 불가능 : 대기
-		else if (target != null && Vector3.Distance(transform.position.YZero(), target.position.YZero()) < characterInfo.attackRange
+		else if (target != null && Vector3.Distance(transform.position.YZero(), target.position.YZero()) < characterInfo.distancedRange
 			&& characterInfo.attackClock <= 0f)
 		{
 			characterInfo.moveTarget = transform.position;
 		}
 		// 타겟 있음, 사거리 밖, 공격가능 혹은 불가능 : 최대 사거리까지 이동
-		else if (target != null && Vector3.Distance(transform.position.YZero(), target.position.YZero()) > characterInfo.attackRange)
+		else if (target != null && Vector3.Distance(transform.position.YZero(), target.position.YZero()) > characterInfo.distancedRange)
 		{
 			characterInfo.moveTarget = target.position;
 		}

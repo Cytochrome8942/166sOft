@@ -800,7 +800,7 @@ GameObject:
   - component: {fileID: 6439348227479123206}
   m_Layer: 0
   m_Name: MinionMeleeRed
-  m_TagString: Untagged
+  m_TagString: Minion
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1225,6 +1225,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba942b94d3c78174182eda305e4f8dd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fullHp: 0
+  currentHp: 0
   hpBarImage: {fileID: 2005018429388363968}
 --- !u!1 &8781730366619214415
 GameObject:

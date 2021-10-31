@@ -19,7 +19,7 @@ public class MinionCasterAttack : MinionAttack
 			minionInfo.attacking = true;
 			return;
 		}
-		else
+		else if (!minionInfo.target.CompareTag("Path"))
 		{
 			casterBulletHolder.transform.GetChild(0).GetComponent<MinionBullet>().Enable(minionInfo.target, transform.position.YZero() + new Vector3(0, 1, 0), minionInfo.attackDamage);
 		}

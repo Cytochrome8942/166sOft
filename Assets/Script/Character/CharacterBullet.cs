@@ -36,7 +36,7 @@ public class CharacterBullet : MonoBehaviour
 	{
 		if(other.CompareTag("Minion") && other.transform == target)
 		{
-			other.GetComponent<MinionControl>().Damaged(characterInfo.attackDamage);
+			other.GetComponent<MinionControl>().Damaged(characterInfo.physicalAttack.get());
 			StartCoroutine(Disable());
 		}
 		if(other.CompareTag("Enemy") && other.transform == target)

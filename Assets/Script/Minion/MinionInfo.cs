@@ -9,17 +9,21 @@ public class MinionInfo : ScriptableObject
     [System.NonSerialized]
     public int team;
 
-    public float hp = 100;
-    public float attackSpeed = 2;
-    public float attackRange = 1;
-    public float targetRange = 5; // 대상을 타겟으로 삼을 거리
-    public float attackDamage = 5;
+    public float hp;
+    public float attackSpeed;
+    public float attackRange;
+    public float targetRange; // 대상을 타겟으로 삼을 거리
+    public float attackDamage;
+
+    public float exp = 24;
+
+    // 추후에 고정
+    public float expRange = 24;
 
     public bool attacking = false;
 
     [System.NonSerialized]
     public Transform target;
 
-    [System.NonSerialized]
     public UnityEvent deathEvent = new UnityEvent();
 }
