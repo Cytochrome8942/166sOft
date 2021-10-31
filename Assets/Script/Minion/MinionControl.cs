@@ -2,14 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MinionControl : MonoBehaviour
+public class MinionControl : CommonObject
 {
 	private MinionInfo minionInfo;
 	public MinionInfo setInfo;
     private cakeslice.Outline outline;
 	private CapsuleCollider minionCollider;
-
-	public MinionHpBar minionHpBar;
 
 	private MinionMove minionMove;
 
@@ -17,11 +15,7 @@ public class MinionControl : MonoBehaviour
 
 	public MinionAttack minionAttack;
 
-	private const int PLAYER = 1 << 3;
-
 	Coroutine dieCoroutine;
-
-	private bool targetable = true;
 
 	// 시간에 따른 체력 및 공격력 변화
 	public void Initialize(GameObject[] path, int team)
@@ -31,7 +25,7 @@ public class MinionControl : MonoBehaviour
 
 		// *** N배
 
-		minionHpBar.Initialize(minionInfo);
+		GetComponentInChildren<MinionHpBar>().Initialize(minionInfo);
 
 		outline = GetComponentInChildren<cakeslice.Outline>();
 		minionCollider = GetComponent<CapsuleCollider>();
@@ -45,11 +39,19 @@ public class MinionControl : MonoBehaviour
 		minionSensor.Initialize(minionInfo);
 	}
 
-	public void Damaged(float damage)
+	public void Damaged(float attack, bool isPhysical = true)
 	{
-		minionInfo.hp -= damage;
+		if (isPhysical)
+		{
+			minionInfo.hp -= attack.CalculateDamage(minionInfo.physicalDefence);
+		}
+		else
+		{
+			minionInfo.hp -= attack.CalculateDamage(minionInfo.magicalDefence);
+		}
 		if (minionInfo.hp <= 0 && dieCoroutine == null)
 		{
+			targetable = false;
 			dieCoroutine = StartCoroutine(Die());
 		}
 	}
@@ -58,25 +60,9 @@ public class MinionControl : MonoBehaviour
 	{
 		// 사망 애니메이션
 		minionInfo.deathEvent.Invoke();
-		targetable = false;
 		minionCollider.enabled = false;
 		// 경험치 분배
-		Collider[] targets = new Collider[10];
-		int colliderAmount = Physics.OverlapSphereNonAlloc(transform.position.YZero(), minionInfo.expRange, targets, PLAYER, QueryTriggerInteraction.Collide);
-		List<CharacterControl> enemies = new List<CharacterControl>();
-		for(int i=0; i<colliderAmount; i++)
-		{
-			var control = targets[i].transform.GetComponentInParent<CharacterControl>();
-			// 적일때만 경험치 부여
-			if (control.IsEnemy(minionInfo.team))
-			{
-				enemies.Add(control);
-			}
-		}
-		for(int i=0; i<enemies.Count; i++)
-		{
-			enemies[i].ExpGet(minionInfo.exp / colliderAmount);
-		}
+		GetComponent<ExpProvider>().ProvideExp(minionInfo.exp, minionInfo.team);
 
 		yield return new WaitForSeconds(0.5f);
 		Destroy(gameObject);

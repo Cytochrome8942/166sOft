@@ -69,7 +69,6 @@ public class CharacterInfo : ScriptableObject
 
     public void LevelUp()
     {
-        Debug.Log(levelData[level.get()]);
         float[] floatData = Array.ConvertAll(levelData[level.get()].Split('\t'), float.Parse);
 
         expMax.set(floatData[0]);

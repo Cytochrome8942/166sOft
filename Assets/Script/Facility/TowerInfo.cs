@@ -1,12 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
-[CreateAssetMenu(menuName = "ScriptableObject/MinionInfo")]
-public class MinionInfo : ScriptableObject
+[CreateAssetMenu(menuName = "ScriptableObject/TowerInfo")]
+public class TowerInfo : ScriptableObject
 {
-    [System.NonSerialized]
     public int team;
 
     public float hp;
@@ -17,12 +15,10 @@ public class MinionInfo : ScriptableObject
     public float physicalDefence;
     public float magicalDefence;
 
-    public float exp = 24;
+    public float exp;
 
-    public bool attacking = false;
+	public Transform target;
 
     [System.NonSerialized]
-    public Transform target;
-
-    public UnityEvent deathEvent = new UnityEvent();
+	public EventData towerEvent;
 }

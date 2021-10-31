@@ -10,6 +10,8 @@ public class HpBar : MonoBehaviour
     public Image hpBarImage;
     private MeshRenderer currentRenderer;
 
+    protected float barHeight;
+
     private Camera mainCamera;
 
     void Awake()
@@ -32,7 +34,7 @@ public class HpBar : MonoBehaviour
             GetComponent<Canvas>().enabled = true;
             hpBarImage.fillAmount = currentHp / fullHp;
             transform.LookAt(transform.position + mainCamera.transform.rotation * Vector3.forward, mainCamera.transform.rotation * Vector3.up);
-            transform.position = transform.parent.position + transform.up * 1f;
+            transform.position = transform.parent.position + transform.up * barHeight;
 		}
 		else
         {

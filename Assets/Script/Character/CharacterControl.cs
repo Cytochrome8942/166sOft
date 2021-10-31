@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEditor;
 
-public class CharacterControl : MonoBehaviour
+public class CharacterControl : CommonObject
 {
 	private CharacterMove characterMove;
 	private CharacterAttack characterAttack;
@@ -42,7 +42,7 @@ public class CharacterControl : MonoBehaviour
 			// ¹º°¡¿¡ ºÎµúÇû´Ù¸é
 			if (Physics.Raycast(ray, out RaycastHit hit, 50f, layermask))
 			{
-				if (hit.transform.CompareTag("Minion")) // 2¼øÀ§
+				if (hit.transform.CompareTag("Minion"))
 				{
 					if (hit.transform.GetComponent<MinionControl>().IsEnemy(characterInfo.team))
 					{
@@ -55,7 +55,7 @@ public class CharacterControl : MonoBehaviour
 						continue;
 					}
 				}
-				else if (hit.transform.CompareTag("Player")) // 1¼øÀ§
+				else if (hit.transform.CompareTag("Player"))
 				{
 					if (hit.transform.GetComponent<CharacterControl>().IsEnemy(characterInfo.team))
 					{
@@ -68,7 +68,17 @@ public class CharacterControl : MonoBehaviour
 						continue;
 					}
 				}
-				else if (hit.transform.CompareTag("Ground")) // 3¼øÀ§
+				else if (hit.transform.CompareTag("Facility"))
+				{
+					if(hit.transform.TryGetComponent(out TowerControl towerControl))
+					{
+						if (towerControl.IsEnemy(characterInfo.team))
+						{
+							characterAttack.AttackTargetSet(hit.transform);
+						}
+					}
+				}
+				else if (hit.transform.CompareTag("Ground"))
 				{
 					characterMove.MoveTo(hit);
 					break;
@@ -96,9 +106,16 @@ public class CharacterControl : MonoBehaviour
 		characterInfo.exp.add(amount);
 	}
 
-	public void Damaged(float damage)
+	public void Damaged(float attack, bool isPhysical = true)
 	{
-		characterInfo.hp.set(characterInfo.hp.get() - damage);
+		if (isPhysical)
+		{
+			characterInfo.hp.add(- attack.CalculateDamage(characterInfo.physicalDefence.get()));
+		}
+		else
+		{
+			characterInfo.hp.add(- attack.CalculateDamage(characterInfo.magicalDefence.get()));
+		}
 	}
 
 	public IEnumerator SkillShoot(Vector3 mousePosition, int skillNumber)

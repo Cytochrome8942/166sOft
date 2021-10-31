@@ -4,8 +4,13 @@ using UnityEngine;
 using UnityEngine.Events;
 
 [CreateAssetMenu(menuName = "ScriptableObject/EventData")]
-public class EventData : MonoBehaviour
+public class EventData : ScriptableObject
 {
-    [System.NonSerialized]
+//    [System.NonSerialized]
     public UnityEvent eventValue = new UnityEvent();
+
+    public void Invoke()
+	{
+        eventValue.Invoke();
+	}
 }

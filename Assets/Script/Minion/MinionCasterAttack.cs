@@ -21,7 +21,7 @@ public class MinionCasterAttack : MinionAttack
 		}
 		else if (!minionInfo.target.CompareTag("Path"))
 		{
-			casterBulletHolder.transform.GetChild(0).GetComponent<MinionBullet>().Enable(minionInfo.target, transform.position.YZero() + new Vector3(0, 1, 0), minionInfo.attackDamage);
+			casterBulletHolder.transform.GetChild(0).GetComponent<EnemyBullet>().Enable(minionInfo.target, transform.position.YZero() + new Vector3(0, 1, 0), minionInfo.attackDamage);
 		}
 		minionInfo.attacking = false;
 	}

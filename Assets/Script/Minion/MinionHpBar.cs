@@ -10,6 +10,8 @@ public class MinionHpBar : HpBar
 	{
 		this.minionInfo = minionInfo;
 		fullHp = minionInfo.hp;
+		barHeight = 1f;
+		hpBarImage.color = minionInfo.team % 2 == 0 ? Color.red : Color.blue;
 		Init();
 	}
 

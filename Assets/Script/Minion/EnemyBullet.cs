@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MinionBullet : MonoBehaviour
+public class EnemyBullet : MonoBehaviour
 {
 	private Transform target;
 
@@ -43,6 +43,11 @@ public class MinionBullet : MonoBehaviour
 		if (other.CompareTag("Player") && other.transform == target)
 		{
 			other.GetComponent<CharacterControl>().Damaged(damage);
+			StartCoroutine(Disable());
+		}
+		if (other.CompareTag("Facility") && other.transform == target && other.transform != transform)
+		{
+			other.GetComponent<TowerControl>().Damaged(damage);
 			StartCoroutine(Disable());
 		}
 	}

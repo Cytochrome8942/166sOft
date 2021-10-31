@@ -12,9 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 814ddefef00cf9f4b909fffdadc2d969, type: 3}
   m_Name: MinionInfoCaster
   m_EditorClassIdentifier: 
-  hp: 375
+  hp: 300
   attackSpeed: 1
   attackRange: 2.5
   targetRange: 6
-  attackDamage: 28
+  attackDamage: 23
+  physicalDefence: 0
+  magicalDefence: 0
+  exp: 10
   attacking: 0
+  deathEvent:
+    m_PersistentCalls:
+      m_Calls: []

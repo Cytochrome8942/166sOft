@@ -28,4 +28,9 @@ public static class MacroMethod
 	{
 		return target1 % 2 != target2 % 2;
 	}
+
+	public static float CalculateDamage(this float attack, float defence)
+	{
+		return 100f * attack / (100f + defence);
+	}
 }

@@ -30,7 +30,7 @@ public class MinionMove : MonoBehaviour
 					minionInfo.target = path[currentPath].transform;
 				}
 			}
-			else // path가 아닐경우 stoppingDistance를 설정해서 사거리까지만 이동하도록 한다
+			else
 			{
 				if (Vector3.Distance(minionInfo.target.position, transform.position) < minionInfo.attackRange && !minionInfo.attacking)
 				{

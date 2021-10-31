@@ -9,18 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 814ddefef00cf9f4b909fffdadc2d969, type: 3}
-  m_Name: MinionInfoMelee
+  m_Script: {fileID: 11500000, guid: d8920f340fecf744bbe74fd4dddb7c85, type: 3}
+  m_Name: TowerInfoFirst
   m_EditorClassIdentifier: 
-  hp: 325
-  attackSpeed: 1.2
-  attackRange: 0.9
+  hp: 2500
+  attackSpeed: 0.9
+  attackRange: 6
   targetRange: 6
-  attackDamage: 20
-  physicalDefence: 0
-  magicalDefence: 0
-  exp: 10
-  attacking: 0
-  deathEvent:
-    m_PersistentCalls:
-      m_Calls: []
+  attackDamage: 90
+  physicalDefence: 20
+  magicalDefence: 20
+  exp: 80
+  target: {fileID: 0}

@@ -43,6 +43,17 @@ public class CharacterBullet : MonoBehaviour
 		{
 			StartCoroutine(Disable());
 		}
+		if(other.CompareTag("Facility") && other.transform == target)
+		{
+			if(other.TryGetComponent(out TowerControl towerControl))
+			{
+				// 마법공격력 > 물리공격력일 경우 마법 평타
+				float attack = characterInfo.physicalAttack.get() > characterInfo.magicalAttack.get() ?
+					characterInfo.physicalAttack.get() : characterInfo.magicalAttack.get();
+				towerControl.Damaged(attack, characterInfo.physicalAttack.get() > characterInfo.magicalAttack.get());
+			}
+			StartCoroutine(Disable());
+		}
 	}
 
 	private IEnumerator Disable()
