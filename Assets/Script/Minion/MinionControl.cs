@@ -17,9 +17,12 @@ public class MinionControl : CommonObject
 
 	Coroutine dieCoroutine;
 
+	Animator animator;
+
 	// 시간에 따른 체력 및 공격력 변화
 	public void Initialize(GameObject[] path, int team)
 	{
+		animator = transform.parent.GetComponent<Animator>();
 		minionInfo = Instantiate(setInfo);
 		minionInfo.team = team;
 
@@ -27,7 +30,7 @@ public class MinionControl : CommonObject
 
 		GetComponentInChildren<MinionHpBar>().Initialize(minionInfo);
 
-		outline = GetComponentInChildren<cakeslice.Outline>();
+		outline = transform.parent.GetComponentInChildren<cakeslice.Outline>();
 		minionCollider = GetComponent<CapsuleCollider>();
 
 		minionMove = GetComponent<MinionMove>();
@@ -59,13 +62,14 @@ public class MinionControl : CommonObject
 	private IEnumerator Die()
 	{
 		// 사망 애니메이션
+		animator.SetTrigger("DIE");
 		minionInfo.deathEvent.Invoke();
 		minionCollider.enabled = false;
 		// 경험치 분배
 		GetComponent<ExpProvider>().ProvideExp(minionInfo.exp, minionInfo.team);
 
 		yield return new WaitForSeconds(0.5f);
-		Destroy(gameObject);
+		Destroy(transform.parent.gameObject);
 	}
 
 	public bool IsEnemy(int target)

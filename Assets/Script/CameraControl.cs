@@ -11,6 +11,8 @@ public class CameraControl : MonoBehaviour
 
 	private float sight = 0f;
 
+	public GameObject character;
+
 	private void Start()
 	{
 		Cursor.lockState = CursorLockMode.Confined;
@@ -47,6 +49,6 @@ public class CameraControl : MonoBehaviour
 
 	public void Reset()
 	{
-		transform.position = GameManager.instance.characterControl.transform.position + new Vector3(0, 25.3f, -7.6f) + transform.forward * sight;
+		transform.position = character.transform.position + new Vector3(0, 25.3f, -7.6f) + transform.forward * sight;
 	}
 }

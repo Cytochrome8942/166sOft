@@ -20,6 +20,9 @@ public class CharacterSkill : MonoBehaviour
 
 	float skillUsableClock = 0f;
 
+	public void Initialize()
+	{
+	}
 
 	public void SkillLock(float time)
 	{

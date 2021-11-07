@@ -49,19 +49,20 @@ public class MinionSpawner : MonoBehaviour
             GameObject newMinion = null;
             if (i < 3)
             {
-                newMinion = Instantiate(minionMelee, spawnPath[0].transform.position, transform.rotation, transform);
+                newMinion = Instantiate(minionMelee, spawnPath[0].transform.position, transform.rotation);
             }
             else if(i == 3)
             {
-                newMinion = Instantiate(minionSiege, spawnPath[0].transform.position, transform.rotation, transform);
+                newMinion = Instantiate(minionSiege, spawnPath[0].transform.position, transform.rotation);
                 newMinion.GetComponentInChildren<MinionSiegeAttack>().siegeBulletHolder = siegeBulletHolder;
             }
 			else
             {
-                newMinion = Instantiate(minionCaster, spawnPath[0].transform.position, transform.rotation, transform);
+                newMinion = Instantiate(minionCaster, spawnPath[0].transform.position, transform.rotation);
                 newMinion.GetComponentInChildren<MinionCasterAttack>().casterBulletHolder = casterBulletHolder;
             }
             newMinion.GetComponentInChildren<MinionControl>().Initialize(spawnPath, team);
+            newMinion.transform.SetParent(transform);
         }
 	}
 }

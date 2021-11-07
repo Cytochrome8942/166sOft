@@ -9,10 +9,13 @@ public abstract class MinionAttack : MonoBehaviour
 
 	private float attackClock = 0;
 
+	Animator animator;
+
 	public void Initialize(MinionInfo minionInfo)
 	{
 		this.minionInfo = minionInfo;
 		minionInfo.deathEvent.AddListener(Die);
+		animator = transform.parent.GetComponent<Animator>();
 	}
 
 	private void Die()
@@ -29,6 +32,7 @@ public abstract class MinionAttack : MonoBehaviour
 		{
 			attackClock = 0f;
 			AttackTarget();
+			animator.SetTrigger("ATTACK");
 		}
 	}
 
