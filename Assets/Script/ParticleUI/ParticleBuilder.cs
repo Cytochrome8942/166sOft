@@ -142,7 +142,6 @@ public class ParticleBuilder : MonoBehaviour
                 emissionModule.rateOverTime = GetFirst(emissionModule.rateOverTime, value);
                 ParticleSystem.Burst tmpBurst = emissionModule.GetBurst(0);
                 tmpBurst.count = 0;
-
                 currentParticle.rateOverTimeMode = 1;
                 SaveAsRanged(currentParticle.rateOverTime, emissionModule.rateOverTime);
                 break;
@@ -150,7 +149,6 @@ public class ParticleBuilder : MonoBehaviour
                 currentParticle.rateOverTimeMode = 2;
                 ParticleSystem.Burst customBurst = emissionModule.GetBurst(0);
                 customBurst.count = (int)value;
-
                 emissionModule.rateOverTime = 0;
                 emissionModule.SetBurst(0, customBurst);
                 currentParticle.rateOverTimeBurst.constantFloat.constantMin = value;
@@ -215,9 +213,8 @@ public class ParticleBuilder : MonoBehaviour
                 currentParticle.rateOverTimeMode = 2;
                 ParticleSystem.Burst customBurst = emissionModule.GetBurst(0);
                 customBurst.cycleCount = (int)value;
-
+                customBurst.repeatInterval = 1 / value;
                 emissionModule.burstCount = 1;
-                emissionModule.rateOverTime = 0;
                 emissionModule.SetBurst(0, customBurst);
                 currentParticle.rateOverTimeBurst.constantFloat.constantMax = value;
                 break;

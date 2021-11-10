@@ -30,36 +30,37 @@ public class ParticleUnitFloat : MonoBehaviour
 
     public void Initialize()
     {
-        valueText.text = (maxValue * initial).ToString("F2");
-        scrollBar.GetComponent<UnityEngine.UI.Scrollbar>().value = initial;
         valueText1.text = (maxValue * initial).ToString("F2");
         scrollBar1.GetComponent<UnityEngine.UI.Scrollbar>().value = initial;
         valueText2.text = (maxValue * initial).ToString("F2");
         scrollBar2.GetComponent<UnityEngine.UI.Scrollbar>().value = initial;
 
+        valueText.text = (maxValue * initial).ToString("F2");
+        scrollBar.GetComponent<UnityEngine.UI.Scrollbar>().value = initial;
+
         SetValue(scrollBar.GetComponent<UnityEngine.UI.Scrollbar>().value);
     }
 
-    public void LoadValue()
+	public void LoadValue()
     {
         if (! particleBuilder.currentParticle.floatProperties.TryGetValue(name, out Particle.FloatProperty savedProperty))
 		{
             Debug.Log("LoadValue Critical Error" + name);
 		}
-        valueText.text = (savedProperty.constantFloat.constantMin).ToString("F2");
-        scrollBar.GetComponent<UnityEngine.UI.Scrollbar>().value = savedProperty.constantFloat.constantMin / maxValue;
-        valueText1.text = (savedProperty.rangedFloat.constantMin).ToString("F2");
-        scrollBar1.GetComponent<UnityEngine.UI.Scrollbar>().value = savedProperty.rangedFloat.constantMin / maxValue;
-        valueText2.text = (savedProperty.rangedFloat.constantMax).ToString("F2");
-        scrollBar2.GetComponent<UnityEngine.UI.Scrollbar>().value = savedProperty.rangedFloat.constantMax / maxValue;
         //ChangeMode에서 SetValue 호출
         if (savedProperty.isConstant)
-		{
+        {
+            valueText.text = (savedProperty.constantFloat.constantMin).ToString("F2");
+            scrollBar.GetComponent<UnityEngine.UI.Scrollbar>().value = savedProperty.constantFloat.constantMin / maxValue;
             GetComponentInChildren<UnityEngine.UI.Dropdown>().value = 0;
-            ChangeMode(0);
+			ChangeMode(0);
 		}
 		else
         {
+            valueText1.text = (savedProperty.rangedFloat.constantMin).ToString("F2");
+            scrollBar1.GetComponent<UnityEngine.UI.Scrollbar>().value = savedProperty.rangedFloat.constantMin / maxValue;
+            valueText2.text = (savedProperty.rangedFloat.constantMax).ToString("F2");
+            scrollBar2.GetComponent<UnityEngine.UI.Scrollbar>().value = savedProperty.rangedFloat.constantMax / maxValue;
             GetComponentInChildren<UnityEngine.UI.Dropdown>().value = 1;
             ChangeMode(1);
         }

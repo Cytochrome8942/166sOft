@@ -16,6 +16,11 @@ public class ParticleIO : MonoBehaviour
 	public ParticleBuilder middlePopup;
 	public ParticleBuilder endPopup;
 
+	//Main Canvas
+	public Canvas startCanvas;
+	public Canvas middleCanvas;
+	public Canvas endCanvas;
+
 	//Extra Popup
 	public GameObject loadPopup;
 	public GameObject newParticlePopup;
@@ -156,19 +161,22 @@ public class ParticleIO : MonoBehaviour
 
 	private void CallInitialize()
 	{
+		startCanvas.enabled = false;
+		middleCanvas.enabled = false;
+		endCanvas.enabled = false;
 		switch (currentParticle.particleType)
 		{
 			case "S":
 				particleBuilder = startPopup;
-				startPopup.gameObject.SetActive(true);
+				startCanvas.enabled = true;
 				break;
 			case "M1":
 				particleBuilder = middlePopup;
-				middlePopup.gameObject.SetActive(true);
+				middleCanvas.enabled = true;
 				break;
 			case "E":
 				particleBuilder = endPopup;
-				endPopup.gameObject.SetActive(true);
+				endCanvas.enabled = true;
 				break;
 		}
 		particleBuilder.currentParticle = currentParticle;

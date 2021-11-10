@@ -54,8 +54,8 @@ public class ParticleUnitColor : MonoBehaviour
         {
             firstBar.color = (savedProperty.rangedColor.colorMin.DeleteAlpha());
             firstAlphaBar.fillAmount = (savedProperty.rangedColor.colorMin.a);
-            secondBar.color = (savedProperty.rangedColor.colorMin.DeleteAlpha());
-            secondAlphaBar.fillAmount = (savedProperty.rangedColor.colorMin.a);
+            secondBar.color = (savedProperty.rangedColor.colorMax.DeleteAlpha());
+            secondAlphaBar.fillAmount = (savedProperty.rangedColor.colorMax.a);
             GetComponentInChildren<Dropdown>().value = 1;
             ChangeMode(1);
         }
@@ -63,8 +63,8 @@ public class ParticleUnitColor : MonoBehaviour
         {
             firstBar.color = (savedProperty.gradientColor.colorMin.DeleteAlpha());
             firstAlphaBar.fillAmount = (savedProperty.gradientColor.colorMin.a);
-            secondBar.color = (savedProperty.gradientColor.colorMin.DeleteAlpha());
-            secondAlphaBar.fillAmount = (savedProperty.gradientColor.colorMin.a);
+            secondBar.color = (savedProperty.gradientColor.colorMax.DeleteAlpha());
+            secondAlphaBar.fillAmount = (savedProperty.gradientColor.colorMax.a);
             GetComponentInChildren<Dropdown>().value = 2;
             ChangeMode(2);
 		}

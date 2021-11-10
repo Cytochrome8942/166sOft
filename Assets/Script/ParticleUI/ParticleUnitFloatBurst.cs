@@ -39,8 +39,7 @@ public class ParticleUnitFloatBurst : MonoBehaviour
 
     public void Initialize()
     {
-        valueText.text = (maxValue * initial).ToString("F2");
-        scrollBar.GetComponent<UnityEngine.UI.Scrollbar>().value = initial;
+        /*
         valueText1.text = (maxValue * initial).ToString("F2");
         scrollBar1.GetComponent<UnityEngine.UI.Scrollbar>().value = initial;
         valueText2.text = (maxValue * initial).ToString("F2");
@@ -49,26 +48,36 @@ public class ParticleUnitFloatBurst : MonoBehaviour
         burstCountScrollBar.GetComponent<UnityEngine.UI.Scrollbar>().value = 0.2449f;
         countText.text = 30.ToString();
         burstTimesScrollBar.GetComponent<UnityEngine.UI.Scrollbar>().value = 0f;
-        timesText.text = 1.ToString();
+        timesText.text = 1.ToString();*/
+
+        valueText.text = (maxValue * initial).ToString("F2");
+        scrollBar.GetComponent<UnityEngine.UI.Scrollbar>().value = initial;
 
         particleBuilder.SetConstant(maxValue * Mathf.Pow(initial, 2), name);
         GetComponentInChildren<UnityEngine.UI.Dropdown>().value = 0;
     }
 
-    // Reusable?
     public void LoadValue()
     {
-        valueText.text = particleBuilder.currentParticle.rateOverTime.constantFloat.constantMin.ToString("F2");
-        scrollBar.GetComponent<UnityEngine.UI.Scrollbar>().value = particleBuilder.currentParticle.rateOverTime.constantFloat.constantMin / maxValue;
-        valueText1.text = particleBuilder.currentParticle.rateOverTime.rangedFloat.constantMin.ToString("F2");
-        scrollBar1.GetComponent<UnityEngine.UI.Scrollbar>().value = particleBuilder.currentParticle.rateOverTime.rangedFloat.constantMin / maxValue;
-        valueText2.text = particleBuilder.currentParticle.rateOverTime.rangedFloat.constantMax.ToString("F2");
-        scrollBar2.GetComponent<UnityEngine.UI.Scrollbar>().value = particleBuilder.currentParticle.rateOverTime.rangedFloat.constantMax / maxValue;
-
-        countText.text = particleBuilder.currentParticle.rateOverTimeBurst.constantFloat.constantMin.ToString("F2");
-        burstCountScrollBar.GetComponent<UnityEngine.UI.Scrollbar>().value = particleBuilder.currentParticle.rateOverTimeBurst.constantFloat.constantMin / maxBurstCount;
-        timesText.text = particleBuilder.currentParticle.rateOverTimeBurst.constantFloat.constantMax.ToString("F2");
-        burstTimesScrollBar.GetComponent<UnityEngine.UI.Scrollbar>().value = particleBuilder.currentParticle.rateOverTimeBurst.constantFloat.constantMax / maxTimes;
+        if (particleBuilder.currentParticle.rateOverTimeMode == 0)
+        {
+            valueText.text = particleBuilder.currentParticle.rateOverTime.constantFloat.constantMin.ToString("F2");
+            scrollBar.GetComponent<UnityEngine.UI.Scrollbar>().value = particleBuilder.currentParticle.rateOverTime.constantFloat.constantMin / maxValue;
+        }
+        else if (particleBuilder.currentParticle.rateOverTimeMode == 1)
+        {
+            valueText1.text = particleBuilder.currentParticle.rateOverTime.rangedFloat.constantMin.ToString("F2");
+            scrollBar1.GetComponent<UnityEngine.UI.Scrollbar>().value = particleBuilder.currentParticle.rateOverTime.rangedFloat.constantMin / maxValue;
+            valueText2.text = particleBuilder.currentParticle.rateOverTime.rangedFloat.constantMax.ToString("F2");
+            scrollBar2.GetComponent<UnityEngine.UI.Scrollbar>().value = particleBuilder.currentParticle.rateOverTime.rangedFloat.constantMax / maxValue;
+        }
+        else
+        {
+            countText.text = particleBuilder.currentParticle.rateOverTimeBurst.constantFloat.constantMin.ToString("F2");
+            burstCountScrollBar.GetComponent<UnityEngine.UI.Scrollbar>().value = particleBuilder.currentParticle.rateOverTimeBurst.constantFloat.constantMin / maxBurstCount;
+            timesText.text = particleBuilder.currentParticle.rateOverTimeBurst.constantFloat.constantMax.ToString("F2");
+            burstTimesScrollBar.GetComponent<UnityEngine.UI.Scrollbar>().value = particleBuilder.currentParticle.rateOverTimeBurst.constantFloat.constantMax / maxTimes;
+        }
         GetComponentInChildren<UnityEngine.UI.Dropdown>().value = particleBuilder.currentParticle.rateOverTimeMode;
         ChangeMode(particleBuilder.currentParticle.rateOverTimeMode);
     }

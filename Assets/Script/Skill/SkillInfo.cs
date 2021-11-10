@@ -12,13 +12,12 @@ public class SkillInfo : ScriptableObject
     public bool isPhysical;
     public float damage;
 
-    public ParticleSystem startParticle;
+    public Particle startParticle;
     public ParticleSystem middleParticle;
     public ParticleSystem endParticle;
 
     public enum SkillType { Target, Shoot, Circle, Rectangle, Sector};
     public SkillType skillType;
-    [SerializeField]
     public Skill skill;
 }
 
