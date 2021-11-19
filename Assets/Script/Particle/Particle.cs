@@ -21,10 +21,7 @@ public class Particle
 	public FloatProperty gravityModifier = new FloatProperty();
 	public ColorProperty startColor = new ColorProperty();
 
-	//emission
-	public int rateOverTimeMode = 0;
-	public FloatProperty rateOverTime = new FloatProperty();
-	public FloatProperty rateOverTimeBurst = new FloatProperty();
+	public EmissionProperty emissionProperty = new EmissionProperty();
 
 	//shape
 	public PlainFloat angle = new PlainFloat();
@@ -39,6 +36,11 @@ public class Particle
 	public PlainFloat velocityOverLifetimeOrbital = new PlainFloat();
 	public ParticleSystem.MinMaxCurve sizeOverLifetimeModule = new ParticleSystem.MinMaxCurve();
 	public FloatProperty rotationOverLifetime = new FloatProperty();
+
+	//Texture
+	public Color32Data[] color32Datas;
+	public int width = 0;
+	public int height = 0;
 
 	public string filePath;
 
@@ -71,6 +73,27 @@ public class Particle
 		public ParticleSystem.MinMaxGradient gradientColor;
 	}
 
+	[System.Serializable]
+	public class EmissionProperty
+	{
+		public int rateOverTimeMode = 0;
+		public ParticleSystem.MinMaxCurve rateOverTime;
+		public ParticleSystem.Burst rateOverTimeBurst;
+	}
+
+	[System.Serializable]
+	public class Color32Data
+	{
+		public byte r, g, b, a;
+		public Color32Data(Color32 source)
+		{
+			r = source.r;
+			g = source.g;
+			b = source.b;
+			a = source.a;
+		}
+	}
+
 
 	// ParticleBuilder Initialize에 필요한 함수들을 리스트에 등록해둠
 	public void SaveProperties()
@@ -86,9 +109,6 @@ public class Particle
 		floatProperties.Add("gravityModifier", gravityModifier);
 		colorProperties.Add("startColor", startColor);
 
-		floatProperties.Add("rateOverTime", rateOverTime);
-		floatProperties.Add("rateOverTimeBurst", rateOverTimeBurst);
-
 		plainFloats.Add("angle", angle);
 		plainFloats.Add("radius", radius);
 		plainFloats.Add("radiusThickness", radiusThickness);
@@ -97,5 +117,30 @@ public class Particle
 
 		plainFloats.Add("velocityOverLifetimeOrbital", velocityOverLifetimeOrbital);
 		floatProperties.Add("rotationOverLifetime", rotationOverLifetime);
+	}
+
+	public void SaveTexture(Texture2D source)
+	{
+		Color32[] colors = source.GetPixels32();
+		width = source.width;
+		height = source.height;
+		color32Datas = new Color32Data[colors.Length];
+		for (int i = 0; i < colors.Length; i++)
+		{
+			color32Datas[i] = new Color32Data(colors[i]);
+		}
+	}
+
+	public Texture2D LoadTexture()
+	{
+		Texture2D texture = new Texture2D(this.width, this.height);
+		Color32[] pixels = new Color32[color32Datas.Length];
+		for (int i = 0; i < pixels.Length; i++)
+		{
+			pixels[i] = new Color32(color32Datas[i].r, color32Datas[i].g, color32Datas[i].b, color32Datas[i].a);
+		}
+		texture.SetPixels32(pixels);
+		texture.Apply();
+		return texture;
 	}
 }

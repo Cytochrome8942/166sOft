@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
 using TMPro;
+using System.Windows.Forms;
+using Ookii.Dialogs;
 
 public class ParticleIO : MonoBehaviour
 {
@@ -27,9 +29,22 @@ public class ParticleIO : MonoBehaviour
 	public GameObject changeNamePopup;
 	public GameObject particleTypePopup;
 
+	//Image input
+	VistaOpenFileDialog openFileDialog;
+	Stream openStream = null;
+
+
 	private string newName;
 
 	public TMP_InputField nameText;
+
+	private void Start()
+	{
+		openFileDialog = new VistaOpenFileDialog
+		{
+			Title = "이미지 파일"
+		};
+	}
 
 	public void SaveParticle()
 	{
@@ -106,7 +121,6 @@ public class ParticleIO : MonoBehaviour
 
 		currentParticle = new Particle();
 		currentParticle.SaveProperties();
-		particleBuilder.initializer.Invoke();
 	}
 
 
@@ -181,5 +195,26 @@ public class ParticleIO : MonoBehaviour
 		}
 		particleBuilder.currentParticle = currentParticle;
 		particleBuilder.particleNameHolder.text = currentParticle.particleName;
+	}
+
+	private string FileOpen()
+	{
+		if(openFileDialog.ShowDialog() == DialogResult.OK)
+		{
+			if((openStream = openFileDialog.OpenFile()) != null)
+			{
+				return openFileDialog.FileName;
+			}
+		}
+		return null;
+	}
+
+	public Texture2D LoadTexture()
+	{
+		string filePath = FileOpen();
+		byte[] bytes = File.ReadAllBytes(filePath);
+		Texture2D loadedTexture = new Texture2D(2, 2);
+		loadedTexture.LoadImage(bytes);
+		return loadedTexture;
 	}
 }

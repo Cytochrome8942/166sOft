@@ -35,7 +35,6 @@ public class ParticleColorPopup : MonoBehaviour
 		currentMode = mode;
 
 		currentColor = changingColorBar.color.AddAlpha(alphaBar.fillAmount);
-
 		//오버헤드 방지
 		colorText[0].text = (currentColor.r * 255).ToString("N0");
 		scrollBars[0].value = currentColor.r;

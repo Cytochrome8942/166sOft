@@ -51,16 +51,16 @@ public class ParticleUnitFloat : MonoBehaviour
         if (savedProperty.isConstant)
         {
             valueText.text = (savedProperty.constantFloat.constantMin).ToString("F2");
-            scrollBar.GetComponent<UnityEngine.UI.Scrollbar>().value = savedProperty.constantFloat.constantMin / maxValue;
+            scrollBar.GetComponent<UnityEngine.UI.Scrollbar>().SetValueWithoutNotify(savedProperty.constantFloat.constantMin / maxValue);
             GetComponentInChildren<UnityEngine.UI.Dropdown>().value = 0;
 			ChangeMode(0);
 		}
 		else
         {
             valueText1.text = (savedProperty.rangedFloat.constantMin).ToString("F2");
-            scrollBar1.GetComponent<UnityEngine.UI.Scrollbar>().value = savedProperty.rangedFloat.constantMin / maxValue;
+            scrollBar1.GetComponent<UnityEngine.UI.Scrollbar>().SetValueWithoutNotify(savedProperty.rangedFloat.constantMin / maxValue);
             valueText2.text = (savedProperty.rangedFloat.constantMax).ToString("F2");
-            scrollBar2.GetComponent<UnityEngine.UI.Scrollbar>().value = savedProperty.rangedFloat.constantMax / maxValue;
+            scrollBar2.GetComponent<UnityEngine.UI.Scrollbar>().SetValueWithoutNotify(savedProperty.rangedFloat.constantMax / maxValue);
             GetComponentInChildren<UnityEngine.UI.Dropdown>().value = 1;
             ChangeMode(1);
         }

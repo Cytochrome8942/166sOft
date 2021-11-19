@@ -69,8 +69,8 @@ public class ParticleBuilder : MonoBehaviour
                 ParticleSystem.Burst tmpBurst = emissionModule.GetBurst(0);
                 tmpBurst.count = 0;
                 emissionModule.rateOverTime = GetConstant(value);
-                currentParticle.rateOverTimeMode = 0;
-                SaveAsConstant(currentParticle.rateOverTime, emissionModule.rateOverTime);
+                currentParticle.emissionProperty.rateOverTimeMode = 0;
+                currentParticle.emissionProperty.rateOverTime = emissionModule.rateOverTime;
                 break;
             case "angle":
                 shapeModule.angle = value;
@@ -139,19 +139,19 @@ public class ParticleBuilder : MonoBehaviour
                 SaveAsRanged(currentParticle.gravityModifier, mainModule.gravityModifier);
                 break;
             case "rateOverTime":
-                emissionModule.rateOverTime = GetFirst(emissionModule.rateOverTime, value);
                 ParticleSystem.Burst tmpBurst = emissionModule.GetBurst(0);
                 tmpBurst.count = 0;
-                currentParticle.rateOverTimeMode = 1;
-                SaveAsRanged(currentParticle.rateOverTime, emissionModule.rateOverTime);
+                currentParticle.emissionProperty.rateOverTimeMode = 1;
+                emissionModule.rateOverTime = GetFirst(emissionModule.rateOverTime, value);
+                currentParticle.emissionProperty.rateOverTime = emissionModule.rateOverTime;
                 break;
             case "rateOverTimeBurst":
-                currentParticle.rateOverTimeMode = 2;
+                currentParticle.emissionProperty.rateOverTimeMode = 2;
                 ParticleSystem.Burst customBurst = emissionModule.GetBurst(0);
-                customBurst.count = (int)value;
+                customBurst.count = new ParticleSystem.MinMaxCurve(value, value);
                 emissionModule.rateOverTime = 0;
                 emissionModule.SetBurst(0, customBurst);
-                currentParticle.rateOverTimeBurst.constantFloat.constantMin = value;
+                currentParticle.emissionProperty.rateOverTimeBurst = customBurst;
                 break;
             case "rotationOverLifetime":
                 rotationOverLifetimeModule.z = GetFirst(rotationOverLifetimeModule.z, value);
@@ -203,20 +203,20 @@ public class ParticleBuilder : MonoBehaviour
                 SaveAsRanged(currentParticle.gravityModifier, mainModule.gravityModifier);
                 break;
             case "rateOverTime":
-                emissionModule.rateOverTime = GetSecond(emissionModule.rateOverTime, value);
                 ParticleSystem.Burst tmpBurst = emissionModule.GetBurst(0);
                 tmpBurst.count = 0;
-                currentParticle.rateOverTimeMode = 1;
-                SaveAsRanged(currentParticle.rateOverTime, emissionModule.rateOverTime);
+                currentParticle.emissionProperty.rateOverTimeMode = 1;
+                emissionModule.rateOverTime = GetSecond(emissionModule.rateOverTime, value);
+                currentParticle.emissionProperty.rateOverTime = emissionModule.rateOverTime;
                 break;
             case "rateOverTimeBurst":
-                currentParticle.rateOverTimeMode = 2;
+                currentParticle.emissionProperty.rateOverTimeMode = 2;
                 ParticleSystem.Burst customBurst = emissionModule.GetBurst(0);
                 customBurst.cycleCount = (int)value;
                 customBurst.repeatInterval = 1 / value;
                 emissionModule.burstCount = 1;
                 emissionModule.SetBurst(0, customBurst);
-                currentParticle.rateOverTimeBurst.constantFloat.constantMax = value;
+                currentParticle.emissionProperty.rateOverTimeBurst = customBurst;
                 break;
             case "rotationOverLifetime":
                 rotationOverLifetimeModule.z = GetSecond(rotationOverLifetimeModule.z, value);
@@ -264,6 +264,14 @@ public class ParticleBuilder : MonoBehaviour
         }
 	}
 
+    public void SetTexture(Texture2D texture)
+	{
+        Material particleMat = new Material(targetParticle.GetComponent<ParticleSystemRenderer>().material);
+        particleMat.SetTexture("_MainTex", texture);
+        currentParticle.SaveTexture(texture);
+        targetParticle.GetComponent<ParticleSystemRenderer>().material = particleMat;
+    }
+
     // float
     private ParticleSystem.MinMaxCurve GetConstant(float value)
 	{
@@ -297,10 +305,10 @@ public class ParticleBuilder : MonoBehaviour
         Gradient gradient = new Gradient();
         GradientColorKey[] newColorKeys = new GradientColorKey[2];
         GradientAlphaKey[] newAlphaKeys = new GradientAlphaKey[2];
-        newColorKeys[1] = curve.gradient.colorKeys[1];
-        newAlphaKeys[1] = curve.gradient.alphaKeys[1];
         newColorKeys[0] = new GradientColorKey(value, 0f);
         newAlphaKeys[0] = new GradientAlphaKey(value.a, 0f);
+        newColorKeys[1] = curve.gradient.colorKeys[1];
+        newAlphaKeys[1] = curve.gradient.alphaKeys[1];
         gradient.colorKeys = newColorKeys;
         gradient.alphaKeys = newAlphaKeys;
         return new ParticleSystem.MinMaxGradient(gradient);
@@ -347,6 +355,6 @@ public class ParticleBuilder : MonoBehaviour
     private void SaveAsGradient(Particle.ColorProperty colorProperty, ParticleSystem.MinMaxGradient curve)
     {
         colorProperty.mode = 2;
-        colorProperty.rangedColor = curve;
+        colorProperty.gradientColor = curve;
     }
 }
