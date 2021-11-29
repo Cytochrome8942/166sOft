@@ -16,6 +16,7 @@ public class CameraControl : MonoBehaviour
 	private void Start()
 	{
 		Cursor.lockState = CursorLockMode.Confined;
+		Reset();
 	}
 
 	public void MoveScreen(Vector3 mousePosition)

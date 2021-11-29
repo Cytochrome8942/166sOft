@@ -6,8 +6,6 @@ public class InputControl : MonoBehaviour
 	public CameraControl cameraControl;
 	public CharacterControl characterControl;
 
-	private Coroutine usingSkill;
-
 	public KeyCode[] skill = { KeyCode.Q, KeyCode.W, KeyCode.E, KeyCode.R };
 
 	[HideInInspector]
@@ -48,7 +46,7 @@ public class InputControl : MonoBehaviour
 				switch (skillMode[skillRegistered[i]])
 				{
 					case SKILLMODE.INSTANT:
-						usingSkill = StartCoroutine(characterControl.SkillShoot(Input.mousePosition, i)); // i번째 스킬 사용
+						characterControl.SkillShoot(Input.mousePosition, i); // i번째 스킬 사용
 						break;
 				}
 			}

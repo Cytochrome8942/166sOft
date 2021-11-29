@@ -2,22 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TowerHpBar : HpBar
+public class NexusHpBar : HpBar
 {
-	private TowerInfo towerInfo;
+	private NexusInfo nexusInfo;
 
-	public void Initialize(TowerInfo towerInfo)
+	public void Initialize(NexusInfo nexusInfo)
 	{
-		this.towerInfo = towerInfo;
+		this.nexusInfo = nexusInfo;
 		barHeight = 5f;
-		fullHp = towerInfo.hp;
+		fullHp = nexusInfo.hp;
 		Init();
 	}
 
 	// Update is called once per frame
 	protected override void Update()
 	{
-		currentHp = towerInfo.hp;
+		currentHp = nexusInfo.hp;
 		base.Update();
 	}
 }

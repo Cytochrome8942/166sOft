@@ -13,14 +13,17 @@ public class TowerControl : CommonObject
 
 	Coroutine dieCoroutine;
 
-	public void Initialize(TowerInfo towerInfo, GameObject towerBulletHolder)
+	public GameObject nextTarget;
+
+	public void Initialize(TowerInfo towerInfo, GameObject towerBulletHolder, bool setTargetable = false)
 	{
 		this.towerInfo = towerInfo;
 		team = towerInfo.team;
 		transform.parent.GetComponentInChildren<TowerSensor>().Initialize(towerInfo);
 		GetComponent<TowerAttack>().Initialize(towerInfo, towerBulletHolder);
-		outline = GetComponent<cakeslice.Outline>();
+		outline = GetComponentInChildren<cakeslice.Outline>();
 		transform.GetComponentInChildren<TowerHpBar>().Initialize(towerInfo);
+		targetable = setTargetable;
 	}
 
 	public void Damaged(float attack, bool isPhysical = true)
@@ -46,6 +49,15 @@ public class TowerControl : CommonObject
 		GetComponent<Collider>().enabled = false;
 		// 경험치 분배
 		GetComponent<ExpProvider>().ProvideExp(towerInfo.exp, towerInfo.team);
+
+		if(TryGetComponent(out TowerControl towerControl))
+		{
+			towerControl.targetable = true;
+		}
+		else if(TryGetComponent(out NexusControl nexusControl))
+		{
+			nexusControl.TowerDestroyed();
+		}
 
 		yield return new WaitForSeconds(0.5f);
 		Destroy(gameObject);

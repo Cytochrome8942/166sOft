@@ -24,6 +24,9 @@ public class Particle
 	public EmissionProperty emissionProperty = new EmissionProperty();
 
 	//shape
+	/*   ********** Activate If Needed **********
+	public enum ShapeType { Sphere, Cone_H, Cone_V }; // horizontal > , vertical v
+	public ShapeType shapeType = ShapeType.Sphere;*/
 	public PlainFloat angle = new PlainFloat();
 	public PlainFloat radius = new PlainFloat();
 	public PlainFloat radiusThickness = new PlainFloat();

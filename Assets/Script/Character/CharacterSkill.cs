@@ -1,56 +1,76 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class CharacterSkill : MonoBehaviour
 {
-	public CharacterInfo characterInfo;
+	private CharacterInfo characterInfo;
 
-	//스킬
-	public GameObject[] skillRange;
-	public ParticleSystem[] skillEffect;
+	public GameObject rangeObject;
+	public SkillInfo skillInfo;
 
-	[HideInInspector]
-	public enum SKILLTYPE
+	public ParticleSystem beforeParticle;
+	public ParticleSystem activeParticle;
+	public ParticleSystem finishParticle;
+
+
+	private void Awake()
 	{
-		TARGETLOCKED_ENEMY, // 타겟 고정 : 적군 
-		TARGETLOCKED_ALLY,  // 타겟 고정 : 아군
-		RANGED,  // 사거리
+		if (skillInfo.skillType == SkillInfo.SkillType.Circle)
+		{
+			transform.localScale = new Vector3(skillInfo.value1, skillInfo.value1, skillInfo.value1);
+		}
+		rangeObject.transform.localScale = new Vector3(1, 0.001f, 1);
 	}
 
-	float skillUsableClock = 0f;
-
-	public void Initialize()
+	public void Initialize(CharacterInfo characterInfo)
 	{
+		this.characterInfo = characterInfo;
 	}
 
-	public void SkillLock(float time)
+	public async void Enable(Vector3 targetPosition)
 	{
-		skillUsableClock = skillUsableClock > -time ? -time : skillUsableClock;
+		transform.position = targetPosition;
+		beforeParticle.Play();
+		rangeObject.SetActive(true);
+		await Task.Delay((int)(skillInfo.beforeAttack * 1000));
+		beforeParticle.Stop();
+		activeParticle.Play();
+		Collider[] targets = new Collider[20];
+		int colliderAmount = Physics.OverlapSphereNonAlloc(targetPosition.YZero(), skillInfo.value1, targets, 1, QueryTriggerInteraction.Collide);
+
+		float damage;
+		if (skillInfo.isPhysical) {
+			damage = skillInfo.damageRate * characterInfo.physicalAttack.get() + skillInfo.damage;
+		}
+		else
+		{
+			damage = skillInfo.damageRate * characterInfo.magicalAttack.get() + skillInfo.damage;
+		}
+		for (int i = 0; i < colliderAmount; i++)
+		{
+			if (targets[i].CompareTag("Minion"))
+			{
+				if (targets[i].GetComponent<MinionControl>().IsEnemy(characterInfo.team))
+				{
+					targets[i].GetComponent<MinionControl>().Damaged(damage, skillInfo.isPhysical);
+				}
+			}
+			else if (targets[i].CompareTag("Player"))
+			{
+				if (targets[i].GetComponent<CharacterControl>().IsEnemy(characterInfo.team))
+				{
+					targets[i].GetComponent<CharacterControl>().Damaged(damage, skillInfo.isPhysical);
+				}
+			}
+		}
+		rangeObject.SetActive(false);
+		await Task.Delay((int)(skillInfo.afterAttack * 1000));
+		activeParticle.Stop();
+		finishParticle.Play();
+
+		await Task.Delay(1000);
+		finishParticle.Stop();
 	}
-
-	public void SkillRange(bool on)
-	{
-
-	}
-	/*
-	public IEnumerator SkillShoot(Vector3 mousePosition, int skillNumber)
-	{
-		
-		characterMove.MoveLock(0.7f + 0.3f); // 시전시간 + 발동시간, 이동 및 회전 모두 금지
-		yield return null;
-		//TODO : 스킬 타입에 따라 Ground, Minion, Enemy 태그 확인 후 사용가능 여부 및 대상 고정 여부 판단
-		var hit = GetHit(mousePosition);
-		var tmpTarget = new Vector3(hit.point.x, 0, hit.point.z);
-		Vector3 rotateTarget = (tmpTarget - transform.position).normalized;
-		targetRotation = Quaternion.LookRotation(new Vector3(rotateTarget.x, 0, rotateTarget.z));
-
-		transform.rotation = targetRotation;
-		moveTarget = transform.position;
-		// 스킬 파티클 사용
-		yield return new WaitForSeconds(0.3f);
-		Instantiate(skillEffect[skillNumber], skillEffect[skillNumber].transform.position, skillEffect[skillNumber].transform.rotation).Play();
-		
-
-	}*/
 }

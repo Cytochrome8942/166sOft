@@ -6,7 +6,7 @@ public class CharacterControl : CommonObject
 {
 	private CharacterMove characterMove;
 	private CharacterAttack characterAttack;
-	private CharacterSkill characterSkill;
+	public CharacterSkill[] characterSkill;
 
 	public CharacterInfo characterInfo;
 
@@ -22,8 +22,10 @@ public class CharacterControl : CommonObject
 		characterMove.characterInfo = characterInfo;
 		characterAttack = GetComponent<CharacterAttack>();
 		characterAttack.characterInfo = characterInfo;
-		characterSkill = GetComponent<CharacterSkill>();
-		characterSkill.characterInfo = characterInfo;
+		for (int i = 0; i < characterSkill.Length; i++)
+		{
+			characterSkill[i].Initialize(characterInfo);
+		}
 		GetComponent<CharacterLevel>().characterInfo = characterInfo;
 	}
 
@@ -118,22 +120,30 @@ public class CharacterControl : CommonObject
 		}
 	}
 
-	public IEnumerator SkillShoot(Vector3 mousePosition, int skillNumber)
+	public void SkillShoot(Vector3 mousePosition, int skillNumber)
 	{
-		characterMove.MoveLock(0.7f + 0.3f); // 시전시간 + 발동시간, 이동 및 회전 모두 금지
-		yield return null;
-		/*
-		//TODO : 스킬 타입에 따라 Ground, Minion, Enemy 태그 확인 후 사용가능 여부 및 대상 고정 여부 판단
-		var hit = GetHit(mousePosition);
-		var tmpTarget = new Vector3(hit.point.x, 0, hit.point.z);
-		Vector3 rotateTarget = (tmpTarget - transform.position).normalized;
-		targetRotation = Quaternion.LookRotation(new Vector3(rotateTarget.x, 0, rotateTarget.z));
-
-		transform.rotation = targetRotation;
-		moveTarget = transform.position;
-		// 스킬 파티클 사용
-		yield return new WaitForSeconds(0.3f);
-		Instantiate(skillEffect[skillNumber], skillEffect[skillNumber].transform.position, skillEffect[skillNumber].transform.rotation).Play();*/
+		Ray ray = Camera.main.ScreenPointToRay(mousePosition);
+		for (int i = 0; i < 5; i++)
+		{
+			// 뭔가에 부딪혔다면
+			if (Physics.Raycast(ray, out RaycastHit hit, 50f, layermask))
+			{
+				if (hit.transform.CompareTag("Ground"))
+				{
+					characterSkill[skillNumber].Enable(hit.point.YZero());
+					characterMove.MoveLock(characterSkill[skillNumber].skillInfo.beforeAttack + characterSkill[skillNumber].skillInfo.afterAttack);
+				}
+				else
+				{
+					ray = new Ray(hit.point, ray.direction);
+					continue;
+				}
+			}
+			else
+			{
+				break;
+			}
+		}
 	}
 
 

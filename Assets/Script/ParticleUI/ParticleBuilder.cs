@@ -25,6 +25,9 @@ public class ParticleBuilder : MonoBehaviour
 
     public string target;
 
+    // buildScene 에서 True, game 초기화 중엔 False
+    public bool isSaving = true;
+
     [System.NonSerialized]
     public UnityEvent loader = new UnityEvent();
     [System.NonSerialized]
@@ -41,64 +44,163 @@ public class ParticleBuilder : MonoBehaviour
         colorOverLifetimeModule = targetParticle.colorOverLifetime;
     }
 
-	public void SetConstant(float value, string name)
+    public void BuildAll(Particle particle)
+	{
+        foreach(KeyValuePair<string, Particle.FloatProperty> pair in particle.floatProperties)
+		{
+			if (pair.Value.isConstant)
+			{
+                SetConstant(pair.Value.constantFloat.constantMin, pair.Key);
+			}
+			else
+			{
+                SetFirst(pair.Value.rangedFloat.constantMin, pair.Key);
+                SetSecond(pair.Value.rangedFloat.constantMax, pair.Key);
+			}
+		}
+
+        foreach(KeyValuePair<string, Particle.ColorProperty> pair in particle.colorProperties)
+		{
+            if(pair.Value.mode == 0)
+			{
+                SetConstant(pair.Value.constantColor.colorMin, pair.Key);
+			}
+            else if(pair.Value.mode == 1)
+			{
+                SetFirst(pair.Value.rangedColor.colorMin, pair.Key);
+                SetSecond(pair.Value.rangedColor.colorMax, pair.Key);
+			}
+			else
+            {
+                SetFirst(pair.Value.gradientColor.colorMin, pair.Key);
+                SetSecond(pair.Value.gradientColor.colorMax, pair.Key);
+            }
+		}
+
+        foreach(KeyValuePair<string, Particle.PlainFloat> pair in particle.plainFloats)
+		{
+            SetConstant(pair.Value.value, pair.Key);
+		}
+
+        //Emit / burst
+        if(particle.emissionProperty.rateOverTimeMode == 0)
+		{
+            SetConstant(particle.emissionProperty.rateOverTime.constantMin, "rateOverTime");
+		}
+        else if (particle.emissionProperty.rateOverTimeMode == 1)
+        {
+            SetFirst(particle.emissionProperty.rateOverTime.constantMin, "rateOverTime");
+            SetSecond(particle.emissionProperty.rateOverTime.constantMax, "rateOverTime");
+        }
+		else
+        {
+            SetFirst(particle.emissionProperty.rateOverTimeBurst.count.constantMin, "rateOverTime");
+            SetSecond(particle.emissionProperty.rateOverTimeBurst.cycleCount, "rateOverTime");
+        }
+
+        SetCurve(particle.velocityOverLifetimeLinear, "velocityOverLifetimeLinear");
+        SetCurve(particle.sizeOverLifetimeModule, "velocityOverLifetimeLinear");
+        SetArcMode(particle.arcMode);
+        SetTexture(particle.LoadTexture());
+	}
+
+    public void SetConstant(float value, string name)
 	{
 		switch (name)
 		{
             case "startLifetime":
                 mainModule.startLifetime = GetConstant(value);
-                SaveAsConstant(currentParticle.startLifetime, mainModule.startLifetime);
+                if (isSaving)
+                {
+                    SaveAsConstant(currentParticle.startLifetime, mainModule.startLifetime);
+                }
                 break;
             case "startSpeed":
                 mainModule.startSpeed = GetConstant(value);
-                SaveAsConstant(currentParticle.startSpeed, mainModule.startSpeed);
+                if (isSaving)
+                { 
+                    SaveAsConstant(currentParticle.startSpeed, mainModule.startSpeed);
+                }
                 break;
             case "startSize":
                 mainModule.startSize = GetConstant(value);
-                SaveAsConstant(currentParticle.startSize, mainModule.startSize);
+                if (isSaving)
+                {
+                    SaveAsConstant(currentParticle.startSize, mainModule.startSize);
+                }
                 break;
             case "startRotation":
                 mainModule.startRotation = GetConstant(value);
-                SaveAsConstant(currentParticle.startRotation, mainModule.startRotation);
+                if (isSaving)
+                {
+                    SaveAsConstant(currentParticle.startRotation, mainModule.startRotation);
+                }
                 break;
             case "gravityModifier":
                 mainModule.gravityModifier = GetConstant(value);
-                SaveAsConstant(currentParticle.gravityModifier, mainModule.gravityModifier);
+                if (isSaving)
+                {
+                    SaveAsConstant(currentParticle.gravityModifier, mainModule.gravityModifier);
+                }
                 break;
             case "rateOverTime":
                 ParticleSystem.Burst tmpBurst = emissionModule.GetBurst(0);
                 tmpBurst.count = 0;
                 emissionModule.rateOverTime = GetConstant(value);
-                currentParticle.emissionProperty.rateOverTimeMode = 0;
-                currentParticle.emissionProperty.rateOverTime = emissionModule.rateOverTime;
+                if (isSaving)
+                {
+                    currentParticle.emissionProperty.rateOverTimeMode = 0;
+                    currentParticle.emissionProperty.rateOverTime = emissionModule.rateOverTime;
+                }
                 break;
             case "angle":
                 shapeModule.angle = value;
-                currentParticle.angle.value = value;
+                if (isSaving)
+                {
+                    currentParticle.angle.value = value;
+                }
                 break;
             case "radius":
                 shapeModule.radius = value;
-                currentParticle.radius.value = value;
+                if (isSaving)
+                {
+                    currentParticle.radius.value = value;
+                }
                 break;
             case "radiusThickness":
                 shapeModule.radiusThickness = value;
-                currentParticle.radiusThickness.value = value;
+                if (isSaving)
+                {
+                    currentParticle.radiusThickness.value = value;
+                }
                 break;
             case "arcSpeed":
                 shapeModule.arcSpeed = value;
-                currentParticle.arcSpeed.value = value;
+                if (isSaving)
+                {
+                    currentParticle.arcSpeed.value = value;
+                }
                 break;
             case "arcSpread":
                 shapeModule.arcSpread = value;
-                currentParticle.arcSpread.value = value;
+                if (isSaving)
+                {
+                    currentParticle.arcSpread.value = value;
+                }
                 break;
             case "velocityOverLifetimeOrbital":
                 velocityOverLifetimeModule.orbitalY = value;
-                currentParticle.velocityOverLifetimeOrbital.value = value;
+                if (isSaving)
+                {
+                    currentParticle.velocityOverLifetimeOrbital.value = value;
+                }
                 break;
             case "rotationOverLifetime":
                 rotationOverLifetimeModule.z = GetConstant(value);
-                SaveAsConstant(currentParticle.rotationOverLifetime, rotationOverLifetimeModule.z);
+                if (isSaving)
+                {
+                    SaveAsConstant(currentParticle.rotationOverLifetime, rotationOverLifetimeModule.z);
+                }
                 break;
         }
 	}
@@ -109,7 +211,10 @@ public class ParticleBuilder : MonoBehaviour
 		{
             case "startColor":
                 mainModule.startColor = GetConstant(value);
-                SaveAsConstant(currentParticle.startColor, mainModule.startColor);
+                if (isSaving)
+                {
+                    SaveAsConstant(currentParticle.startColor, mainModule.startColor);
+                }
                 break;
 		}
 	}
@@ -120,30 +225,48 @@ public class ParticleBuilder : MonoBehaviour
         {
             case "startLifetime":
                 mainModule.startLifetime = GetFirst(mainModule.startLifetime, value);
-                SaveAsRanged(currentParticle.startLifetime, mainModule.startLifetime);
+                if (isSaving)
+                {
+                    SaveAsRanged(currentParticle.startLifetime, mainModule.startLifetime);
+                }
                 break;
             case "startSpeed":
                 mainModule.startSpeed = GetFirst(mainModule.startSpeed, value);
-                SaveAsRanged(currentParticle.startSpeed, mainModule.startSpeed);
+                if (isSaving)
+                {
+                    SaveAsRanged(currentParticle.startSpeed, mainModule.startSpeed);
+                }
                 break;
             case "startSize":
                 mainModule.startSize = GetFirst(mainModule.startSize, value);
-                SaveAsRanged(currentParticle.startSize, mainModule.startSize);
+                if (isSaving)
+                {
+                    SaveAsRanged(currentParticle.startSize, mainModule.startSize);
+                }
                 break;
             case "startRotation":
                 mainModule.startRotation = GetFirst(mainModule.startRotation, value);
-                SaveAsRanged(currentParticle.startRotation, mainModule.startRotation);
+                if (isSaving)
+                {
+                    SaveAsRanged(currentParticle.startRotation, mainModule.startRotation);
+                }
                 break;
             case "gravityModifier":
                 mainModule.gravityModifier = GetFirst(mainModule.gravityModifier, value);
-                SaveAsRanged(currentParticle.gravityModifier, mainModule.gravityModifier);
+                if (isSaving)
+                {
+                    SaveAsRanged(currentParticle.gravityModifier, mainModule.gravityModifier);
+                }
                 break;
             case "rateOverTime":
                 ParticleSystem.Burst tmpBurst = emissionModule.GetBurst(0);
                 tmpBurst.count = 0;
-                currentParticle.emissionProperty.rateOverTimeMode = 1;
                 emissionModule.rateOverTime = GetFirst(emissionModule.rateOverTime, value);
-                currentParticle.emissionProperty.rateOverTime = emissionModule.rateOverTime;
+                if (isSaving)
+                {
+                    currentParticle.emissionProperty.rateOverTimeMode = 1;
+                    currentParticle.emissionProperty.rateOverTime = emissionModule.rateOverTime;
+                }
                 break;
             case "rateOverTimeBurst":
                 currentParticle.emissionProperty.rateOverTimeMode = 2;
@@ -151,11 +274,17 @@ public class ParticleBuilder : MonoBehaviour
                 customBurst.count = new ParticleSystem.MinMaxCurve(value, value);
                 emissionModule.rateOverTime = 0;
                 emissionModule.SetBurst(0, customBurst);
-                currentParticle.emissionProperty.rateOverTimeBurst = customBurst;
+                if (isSaving)
+                {
+                    currentParticle.emissionProperty.rateOverTimeBurst = customBurst;
+                }
                 break;
             case "rotationOverLifetime":
                 rotationOverLifetimeModule.z = GetFirst(rotationOverLifetimeModule.z, value);
-                SaveAsConstant(currentParticle.rotationOverLifetime, rotationOverLifetimeModule.z);
+                if (isSaving)
+                {
+                    SaveAsConstant(currentParticle.rotationOverLifetime, rotationOverLifetimeModule.z);
+                }
                 break;
         }
     }
@@ -167,13 +296,19 @@ public class ParticleBuilder : MonoBehaviour
             case "startColor":
                 colorOverLifetimeModule.enabled = false;
                 mainModule.startColor = GetFirst(mainModule.startColor, value);
-                SaveAsRanged(currentParticle.startColor, mainModule.startColor);
+                if (isSaving)
+                {
+                    SaveAsRanged(currentParticle.startColor, mainModule.startColor);
+                }
                 break;
             case "colorOverGradient":
                 colorOverLifetimeModule.enabled = true;
                 mainModule.startColor = Color.white;
                 colorOverLifetimeModule.color = GetFirstGradient(colorOverLifetimeModule.color, value);
-                SaveAsGradient(currentParticle.startColor, colorOverLifetimeModule.color);
+                if (isSaving)
+                {
+                    SaveAsGradient(currentParticle.startColor, colorOverLifetimeModule.color);
+                }
                 break;
         }
     }
@@ -184,30 +319,48 @@ public class ParticleBuilder : MonoBehaviour
         {
             case "startLifetime":
                 mainModule.startLifetime = GetSecond(mainModule.startLifetime, value);
-                SaveAsRanged(currentParticle.startLifetime, mainModule.startLifetime);
+                if (isSaving)
+                {
+                    SaveAsRanged(currentParticle.startLifetime, mainModule.startLifetime);
+                }
                 break;
             case "startSpeed":
                 mainModule.startSpeed = GetSecond(mainModule.startSpeed, value);
-                SaveAsRanged(currentParticle.startSpeed, mainModule.startSpeed);
+                if (isSaving)
+                {
+                    SaveAsRanged(currentParticle.startSpeed, mainModule.startSpeed);
+                }
                 break;
             case "startSize":
                 mainModule.startSize = GetSecond(mainModule.startSize, value);
-                SaveAsRanged(currentParticle.startSize, mainModule.startSize);
+                if (isSaving)
+                {
+                    SaveAsRanged(currentParticle.startSize, mainModule.startSize);
+                }
                 break;
             case "startRotation":
                 mainModule.startRotation = GetSecond(mainModule.startRotation, value);
-                SaveAsRanged(currentParticle.startRotation, mainModule.startRotation);
+                if (isSaving)
+                {
+                    SaveAsRanged(currentParticle.startRotation, mainModule.startRotation);
+                }
                 break;
             case "gravityModifier":
                 mainModule.gravityModifier = GetSecond(mainModule.gravityModifier, value);
-                SaveAsRanged(currentParticle.gravityModifier, mainModule.gravityModifier);
+                if (isSaving)
+                {
+                    SaveAsRanged(currentParticle.gravityModifier, mainModule.gravityModifier);
+                }
                 break;
             case "rateOverTime":
                 ParticleSystem.Burst tmpBurst = emissionModule.GetBurst(0);
                 tmpBurst.count = 0;
-                currentParticle.emissionProperty.rateOverTimeMode = 1;
                 emissionModule.rateOverTime = GetSecond(emissionModule.rateOverTime, value);
-                currentParticle.emissionProperty.rateOverTime = emissionModule.rateOverTime;
+                if (isSaving)
+                {
+                    currentParticle.emissionProperty.rateOverTimeMode = 1;
+                    currentParticle.emissionProperty.rateOverTime = emissionModule.rateOverTime;
+                }
                 break;
             case "rateOverTimeBurst":
                 currentParticle.emissionProperty.rateOverTimeMode = 2;
@@ -216,11 +369,17 @@ public class ParticleBuilder : MonoBehaviour
                 customBurst.repeatInterval = 1 / value;
                 emissionModule.burstCount = 1;
                 emissionModule.SetBurst(0, customBurst);
-                currentParticle.emissionProperty.rateOverTimeBurst = customBurst;
+                if (isSaving)
+                {
+                    currentParticle.emissionProperty.rateOverTimeBurst = customBurst;
+                }
                 break;
             case "rotationOverLifetime":
                 rotationOverLifetimeModule.z = GetSecond(rotationOverLifetimeModule.z, value);
-                SaveAsConstant(currentParticle.rotationOverLifetime, rotationOverLifetimeModule.z);
+                if (isSaving)
+                {
+                    SaveAsConstant(currentParticle.rotationOverLifetime, rotationOverLifetimeModule.z);
+                }
                 break;
         }
     }
@@ -232,13 +391,19 @@ public class ParticleBuilder : MonoBehaviour
             case "startColor":
                 colorOverLifetimeModule.enabled = false;
                 mainModule.startColor = GetSecond(mainModule.startColor, value);
-                SaveAsRanged(currentParticle.startColor, mainModule.startColor);
+                if (isSaving)
+                {
+                    SaveAsRanged(currentParticle.startColor, mainModule.startColor);
+                }
                 break;
             case "colorOverGradient":
                 colorOverLifetimeModule.enabled = true;
                 mainModule.startColor = Color.white;
                 colorOverLifetimeModule.color = GetSecondGradient(colorOverLifetimeModule.color, value);
-                SaveAsGradient(currentParticle.startColor, colorOverLifetimeModule.color);
+                if (isSaving)
+                {
+                    SaveAsGradient(currentParticle.startColor, colorOverLifetimeModule.color);
+                }
                 break;
         }
     }
@@ -246,7 +411,10 @@ public class ParticleBuilder : MonoBehaviour
     public void SetArcMode(ParticleSystemShapeMultiModeValue mode)
 	{
         shapeModule.arcMode = mode;
-        currentParticle.arcMode = mode;
+        if (isSaving)
+        {
+            currentParticle.arcMode = mode;
+        }
 	}
 
     public void SetCurve(ParticleSystem.MinMaxCurve animationCurve, string name)
@@ -255,11 +423,17 @@ public class ParticleBuilder : MonoBehaviour
 		{
             case "velocityOverLifetimeLinear":
                 velocityOverLifetimeModule.speedModifier= animationCurve;
-                currentParticle.velocityOverLifetimeLinear = animationCurve;
+                if (isSaving)
+                {
+                    currentParticle.velocityOverLifetimeLinear = animationCurve;
+                }
                 break;
             case "sizeOverLifetime":
                 sizeOverLifetimeModule.size = animationCurve;
-                currentParticle.sizeOverLifetimeModule = animationCurve;
+                if (isSaving)
+                {
+                    currentParticle.sizeOverLifetimeModule = animationCurve;
+                }
                 break;
         }
 	}
@@ -268,8 +442,11 @@ public class ParticleBuilder : MonoBehaviour
 	{
         Material particleMat = new Material(targetParticle.GetComponent<ParticleSystemRenderer>().material);
         particleMat.SetTexture("_MainTex", texture);
-        currentParticle.SaveTexture(texture);
         targetParticle.GetComponent<ParticleSystemRenderer>().material = particleMat;
+        if (isSaving)
+        {
+            currentParticle.SaveTexture(texture);
+        }
     }
 
     // float

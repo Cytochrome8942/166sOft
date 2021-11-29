@@ -6,63 +6,33 @@ using UnityEngine;
 public class SkillInfo : ScriptableObject
 {
     //Common
-    public float beforeAttack;
-    public float afterAttack;
-    public float cooldown;
-    public bool isPhysical;
-    public float damage;
+    public float beforeAttack = 0.5f;
+    public float afterAttack = 0.5f;
+    public float cooldown = 5f;
+    public bool isPhysical = true;
+    public float damageRate = 1f;
+    public float damage = 100f;
 
     public Particle startParticle;
-    public ParticleSystem middleParticle;
-    public ParticleSystem endParticle;
+    public Particle middleParticle;
+    public Particle endParticle;
 
     public enum SkillType { Target, Shoot, Circle, Rectangle, Sector};
     public SkillType skillType;
-    public Skill skill;
+
+    public bool boolValue = true;
+    public float value1 = 1;
+    public float value2 = 1;
+    public float value3 = 1;
 }
 
-[System.Serializable]
-public class Skill { }
+//Target - range;
 
-[System.Serializable]
-public class Target : Skill
-{
-    [SerializeField]
-    public float range = 1;
-}
+//Shoot : isPenetrate, speed, lifeTime
 
-[System.Serializable]
-public class Shoot : Skill
-{
-    [SerializeField]
-    public bool isPenetrate = true;
-    [SerializeField]
-    public float speed = 1;
-    [SerializeField]
-    public float lifeTime = 1;
-}
+//Circle : radius, activeTime, range
 
+//Rectangle : width, length, activeTime
 
-[System.Serializable]
-public class Circle : Skill
-{
-    public float radius = 1;
-    public float activeTime = 1;
-    public float range = 1;
-}
+//Sector : radius, angle, activeTime
 
-[System.Serializable]
-public class Rectangle : Skill
-{
-    public float width = 1;
-    public float length = 1;
-    public float activeTime = 1;
-}
-
-[System.Serializable]
-public class Sector : Skill
-{
-    public float radius = 1;
-    public float angle = 1;
-    public float activeTime = 1;
-}

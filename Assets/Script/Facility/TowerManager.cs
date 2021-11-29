@@ -9,30 +9,38 @@ public class TowerManager : MonoBehaviour
     public GameObject[] redTowers;
     public GameObject[] blueTowers;
 
-    public TowerInfo towerInfoBaseFirst;
-    public TowerInfo towerInfoBaseSecond;
-    public TowerInfo towerInfoBaseFinal;
+    public TowerInfo towerInfoBaseCapital;
+    public TowerInfo towerInfoBaseStart;
+    public TowerInfo towerInfoBaseEnd;
 
     public EventData towerEvent;
 
 	private void Awake()
 	{
-        towerInfoBaseFirst.towerEvent = towerEvent;
-        towerInfoBaseFirst.team = 0;
-        redTowers[0].GetComponentInChildren<TowerControl>().Initialize(Instantiate(towerInfoBaseFirst), towerBulletHolder);
-        towerInfoBaseFirst.team = 1;
-        blueTowers[0].GetComponentInChildren<TowerControl>().Initialize(Instantiate(towerInfoBaseFirst), towerBulletHolder);
+        towerInfoBaseCapital.towerEvent = towerEvent;
+        towerInfoBaseCapital.team = 0;
+        redTowers[0].GetComponentInChildren<TowerControl>().Initialize(Instantiate(towerInfoBaseCapital), towerBulletHolder);
+        redTowers[1].GetComponentInChildren<TowerControl>().Initialize(Instantiate(towerInfoBaseCapital), towerBulletHolder);
+        towerInfoBaseCapital.team = 1;
+        blueTowers[0].GetComponentInChildren<TowerControl>().Initialize(Instantiate(towerInfoBaseCapital), towerBulletHolder);
+        blueTowers[1].GetComponentInChildren<TowerControl>().Initialize(Instantiate(towerInfoBaseCapital), towerBulletHolder);
 
-        towerInfoBaseSecond.towerEvent = towerEvent;
-        towerInfoBaseSecond.team = 0;
-        redTowers[1].GetComponentInChildren<TowerControl>().Initialize(Instantiate(towerInfoBaseSecond), towerBulletHolder);
-        towerInfoBaseSecond.team = 1;
-        blueTowers[1].GetComponentInChildren<TowerControl>().Initialize(Instantiate(towerInfoBaseSecond), towerBulletHolder);
+        towerInfoBaseStart.towerEvent = towerEvent;
+        for (int i = 2; i < 5; i++)
+        {
+            towerInfoBaseStart.team = 0;
+            redTowers[i].GetComponentInChildren<TowerControl>().Initialize(Instantiate(towerInfoBaseStart), towerBulletHolder);
+            towerInfoBaseStart.team = 1;
+            blueTowers[i].GetComponentInChildren<TowerControl>().Initialize(Instantiate(towerInfoBaseStart), towerBulletHolder);
+        }
 
-        towerInfoBaseFinal.towerEvent = towerEvent;
-        towerInfoBaseFinal.team = 0;
-        redTowers[2].GetComponentInChildren<TowerControl>().Initialize(Instantiate(towerInfoBaseFinal), towerBulletHolder);
-        towerInfoBaseFinal.team = 1;
-        blueTowers[2].GetComponentInChildren<TowerControl>().Initialize(Instantiate(towerInfoBaseFinal), towerBulletHolder);
+        towerInfoBaseEnd.towerEvent = towerEvent;
+        for (int i = 5; i < 8; i++)
+        {
+            towerInfoBaseEnd.team = 0;
+            redTowers[i].GetComponentInChildren<TowerControl>().Initialize(Instantiate(towerInfoBaseEnd), towerBulletHolder, true);
+            towerInfoBaseEnd.team = 1;
+            blueTowers[i].GetComponentInChildren<TowerControl>().Initialize(Instantiate(towerInfoBaseEnd), towerBulletHolder, true);
+        }
     }
 }

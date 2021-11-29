@@ -13,6 +13,10 @@ public class GameManager : MonoBehaviour
     public SkillInfo skill3;
     public SkillInfo skill4;
 
+    public Particle[,] particle;
+
+    public string file = "C:/Users/santa/Desktop/Particles/New Particle";
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -24,6 +28,5 @@ public class GameManager : MonoBehaviour
 		{
             Destroy(gameObject);
 		}
-        skill1.skill = new Target();
     }
 }

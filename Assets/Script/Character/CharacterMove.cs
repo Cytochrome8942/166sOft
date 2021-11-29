@@ -74,7 +74,7 @@ public class CharacterMove : MonoBehaviour
 	}
 
 
-	public void MoveLock(float time, bool moveLock = false, bool rotateLock = false)
+	public void MoveLock(float time, bool moveLock = true, bool rotateLock = true)
 	{
 		// clock 이 설정하려는 time보다 클 경우 time으로 쿨타임 설정, 이외에는 무시 (중복 Lock)
 		if(moveLock && characterInfo.movableClock > -time)

@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8920f340fecf744bbe74fd4dddb7c85, type: 3}
   m_Name: TowerInfoFinal
   m_EditorClassIdentifier: 
+  team: 1
   hp: 2000
-  attackSpeed: 0.5
-  attackRange: 6
-  targetRange: 6
+  attackSpeed: 2
+  attackRange: 12
+  targetRange: 12
   attackDamage: 200
   physicalDefence: 80
   magicalDefence: 80

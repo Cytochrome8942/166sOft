@@ -8,7 +8,7 @@ public class HpBar : MonoBehaviour
     public float fullHp;
     public float currentHp;
     public Image hpBarImage;
-    private Renderer currentRenderer;
+    public Renderer currentRenderer;
 
     protected float barHeight;
 
@@ -17,7 +17,10 @@ public class HpBar : MonoBehaviour
     void Awake()
     {
         mainCamera = Camera.main;
-        currentRenderer = transform.parent.parent.GetComponentInChildren<Renderer>();
+        if (currentRenderer == null)
+        {
+            currentRenderer = transform.parent.parent.GetComponentInChildren<Renderer>();
+        }
     }
 
     protected void Init()
