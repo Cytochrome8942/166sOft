@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Bolt;
 
 public class MinionMeleeAttack : MinionAttack
 {
@@ -11,7 +12,7 @@ public class MinionMeleeAttack : MinionAttack
 	}
 
 
-	//¾Ö´Ï¸ÞÀÌ¼Ç¿¡ ´Þ±â
+	//ï¿½Ö´Ï¸ï¿½ï¿½Ì¼Ç¿ï¿½ ï¿½Þ±ï¿½
 	public void Damage()
 	{
 		if(minionInfo.target == null)
@@ -21,11 +22,15 @@ public class MinionMeleeAttack : MinionAttack
 		}
 		else if (minionInfo.target.CompareTag("Minion"))
 		{
-			minionInfo.target.GetComponent<MinionControl>().Damaged(minionInfo.attackDamage);
+			var e = bulletHitEvent.Create(minionInfo.target.GetComponentInParent<BoltEntity>());
+			e.Damage = minionInfo.attackDamage;
+			e.Send();
 		}
 		else if (minionInfo.target.CompareTag("Player"))
 		{
-			minionInfo.target.GetComponent<CharacterControl>().Damaged(minionInfo.attackDamage);
+			var e = bulletHitEvent.Create(minionInfo.target.GetComponent<BoltEntity>());
+			e.Damage = minionInfo.attackDamage;
+			e.Send();
 		}
 		minionInfo.attacking = false;
 	}

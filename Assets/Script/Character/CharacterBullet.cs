@@ -1,16 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Bolt;
 
-public class CharacterBullet : MonoBehaviour
+public class CharacterBullet : EntityBehaviour<IBulletState>
 {
 	private Transform target;
 
 	public CharacterInfo characterInfo;
 
 	public float bulletSpeed;
+	public override void Attached(){
+		state.SetTransforms(state.Position, transform);
+	}
 
-	public void Enable(Transform target, Vector3 firstPosition)
+	public void Enable(Transform target, Vector3 firstPosition, CharacterInfo info)
 	{
 		transform.position = firstPosition;
 		this.target = target;
@@ -18,9 +22,10 @@ public class CharacterBullet : MonoBehaviour
 		GetComponent<MeshRenderer>().enabled = true;
 		gameObject.SetActive(true);
 		transform.SetAsLastSibling();
+		characterInfo = info;
 	}
 
-	private void Update()
+	public override void SimulateOwner()
 	{
 		if (target != null)
 		{
@@ -34,25 +39,37 @@ public class CharacterBullet : MonoBehaviour
 
 	private void OnTriggerEnter(Collider other)
 	{
-		if(other.CompareTag("Minion") && other.transform == target)
-		{
-			other.GetComponent<MinionControl>().Damaged(characterInfo.physicalAttack.get());
-			StartCoroutine(Disable());
-		}
-		if(other.CompareTag("Enemy") && other.transform == target)
-		{
-			StartCoroutine(Disable());
-		}
-		if(other.CompareTag("Facility") && other.transform == target)
-		{
-			if(other.TryGetComponent(out TowerControl towerControl))
+		if(entity.IsOwner){
+			if(other.CompareTag("Minion") && other.transform == target)
 			{
-				// ¸¶¹ý°ø°Ý·Â > ¹°¸®°ø°Ý·ÂÀÏ °æ¿ì ¸¶¹ý ÆòÅ¸
-				float attack = characterInfo.physicalAttack.get() > characterInfo.magicalAttack.get() ?
-					characterInfo.physicalAttack.get() : characterInfo.magicalAttack.get();
-				towerControl.Damaged(attack, characterInfo.physicalAttack.get() > characterInfo.magicalAttack.get());
+				var hitEvent = bulletHitEvent.Create(other.gameObject.GetComponentInParent<BoltEntity>());
+				hitEvent.Damage = characterInfo.physicalAttack.get();
+				hitEvent.Send();
+				StartCoroutine(Disable()); 
 			}
-			StartCoroutine(Disable());
+			if(other.CompareTag("Enemy") && other.transform == target)
+			{
+				var hitEvent = bulletHitEvent.Create(other.gameObject.GetComponent<BoltEntity>());
+				hitEvent.Damage = characterInfo.physicalAttack.get();
+				hitEvent.Send();
+				StartCoroutine(Disable());
+			}
+			if(other.CompareTag("Facility") && other.transform == target)
+			{
+				var hitEvent = bulletHitEvent.Create(other.gameObject.GetComponentInParent<BoltEntity>());
+				/*
+				if(other.TryGetComponent(out TowerControl towerControl))
+				{
+					// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý·ï¿½ > ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å¸
+					float attack = characterInfo.physicalAttack.get() > characterInfo.magicalAttack.get() ?
+						characterInfo.physicalAttack.get() : characterInfo.magicalAttack.get();
+					towerControl.Damaged(attack, characterInfo.physicalAttack.get() > characterInfo.magicalAttack.get());
+				}
+				*/
+				hitEvent.Damage = characterInfo.physicalAttack.get();
+				hitEvent.Send();
+				StartCoroutine(Disable());
+			}
 		}
 	}
 

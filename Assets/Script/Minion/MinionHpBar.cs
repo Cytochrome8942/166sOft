@@ -18,7 +18,7 @@ public class MinionHpBar : HpBar
 	// Update is called once per frame
 	protected override void Update()
     {
-		currentHp = minionInfo.hp;
+  		currentHp = state.Health;
 		base.Update();
     }
 }

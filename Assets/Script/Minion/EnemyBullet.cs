@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Bolt;
 
-public class EnemyBullet : MonoBehaviour
+public class EnemyBullet : EntityBehaviour<IBulletState>
 {
 	private Transform target;
 
@@ -37,19 +38,29 @@ public class EnemyBullet : MonoBehaviour
 	{
 		if (other.CompareTag("Minion") && other.transform == target)
 		{
-			other.GetComponent<MinionControl>().Damaged(damage);
+			var e = bulletHitEvent.Create(target.GetComponentInParent<BoltEntity>());
+			e.Damage = damage;
+			e.Send();
 			StartCoroutine(Disable());
 		}
 		if (other.CompareTag("Player") && other.transform == target)
 		{
-			other.GetComponent<CharacterControl>().Damaged(damage);
+			var e = bulletHitEvent.Create(target.GetComponent<BoltEntity>());
+			e.Damage = damage;
+			e.Send(); 
 			StartCoroutine(Disable());
 		}
 		if (other.CompareTag("Facility") && other.transform == target && other.transform != transform)
 		{
-			other.GetComponent<TowerControl>().Damaged(damage);
+			var e = bulletHitEvent.Create(target.GetComponentInParent<BoltEntity>());
+			e.Damage = damage;
+			e.Send();
 			StartCoroutine(Disable());
 		}
+	}
+
+	public override void Detached(){
+		base.Detached();
 	}
 
 	private IEnumerator Disable()
@@ -58,6 +69,6 @@ public class EnemyBullet : MonoBehaviour
 		GetComponent<Collider>().enabled = false;
 		GetComponent<MeshRenderer>().enabled = false;
 		yield return new WaitForSeconds(0.3f);
-		gameObject.SetActive(false);
+		BoltEntity.Destroy(gameObject);
 	}
 }

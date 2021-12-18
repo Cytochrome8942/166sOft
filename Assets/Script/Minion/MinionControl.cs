@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Bolt;
 
 public class MinionControl : CommonObject
 {
@@ -17,20 +18,17 @@ public class MinionControl : CommonObject
 
 	Coroutine dieCoroutine;
 
-	Animator animator;
-
-	// ½Ã°£¿¡ µû¸¥ Ã¼·Â ¹× °ø°Ý·Â º¯È­
+	// ï¿½Ã°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã¼ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Ý·ï¿½ ï¿½ï¿½È­
 	public void Initialize(GameObject[] path, int team)
 	{
-		animator = transform.parent.GetComponent<Animator>();
 		minionInfo = Instantiate(setInfo);
 		minionInfo.team = team;
+		state.Team = minionInfo.team;
 
-		// *** N¹è
+		// *** Nï¿½ï¿½
 
 		GetComponentInChildren<MinionHpBar>().Initialize(minionInfo);
 
-		outline = transform.parent.GetComponentInChildren<cakeslice.Outline>();
 		minionCollider = GetComponent<CapsuleCollider>();
 
 		minionMove = GetComponent<MinionMove>();
@@ -41,7 +39,9 @@ public class MinionControl : CommonObject
 
 		minionSensor.Initialize(minionInfo);
 	}
-
+	public override void Attached(){
+		outline = GetComponentInChildren<cakeslice.Outline>();
+	}
 	public void Damaged(float attack, bool isPhysical = true)
 	{
 		if (isPhysical)
@@ -52,6 +52,7 @@ public class MinionControl : CommonObject
 		{
 			minionInfo.hp -= attack.CalculateDamage(minionInfo.magicalDefence);
 		}
+		state.Health = minionInfo.hp;
 		if (minionInfo.hp <= 0 && dieCoroutine == null)
 		{
 			targetable = false;
@@ -59,27 +60,33 @@ public class MinionControl : CommonObject
 		}
 	}
 
+	public override void OnEvent(bulletHitEvent evnt){
+		Debug.Log("minion D");
+		if(entity.IsOwner){
+			Damaged(evnt.Damage);
+		}
+	}
+
 	private IEnumerator Die()
 	{
-		// »ç¸Á ¾Ö´Ï¸ÞÀÌ¼Ç
-		animator.SetTrigger("DIE");
+		// ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½
 		minionInfo.deathEvent.Invoke();
 		minionCollider.enabled = false;
-		// °æÇèÄ¡ ºÐ¹è
+		// ï¿½ï¿½ï¿½ï¿½Ä¡ ï¿½Ð¹ï¿½
 		GetComponent<ExpProvider>().ProvideExp(minionInfo.exp, minionInfo.team);
 
 		yield return new WaitForSeconds(0.5f);
-		Destroy(transform.parent.gameObject);
+	    BoltNetwork.Destroy(gameObject.transform.parent.gameObject);
 	}
 
 	public bool IsEnemy(int target)
 	{
-		return minionInfo.team.IsEnemy(target);
+		return state.Team.IsEnemy(target);
 	}
 
 	private void OnMouseOver()
 	{
-		if (targetable && GameManager.instance.playerInfo.team.IsEnemy(minionInfo.team))
+		if (targetable && GameManager.instance.playerEntity.GetState<IMinionState>().Team.IsEnemy(state.Team))
 		{
 			outline.eraseRenderer = false;
 		}
@@ -87,6 +94,6 @@ public class MinionControl : CommonObject
 
 	private void OnMouseExit()
 	{
-		outline.eraseRenderer = true;
+ 			outline.eraseRenderer = true;
 	}
 }

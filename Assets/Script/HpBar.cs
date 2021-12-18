@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Photon.Bolt;
 
-public class HpBar : MonoBehaviour
+public class HpBar : EntityBehaviour<IMinionState>
 {
     public float fullHp;
     public float currentHp;
@@ -31,7 +32,7 @@ public class HpBar : MonoBehaviour
     // Update is called once per frame
     protected virtual void Update()
     {
-        // Ã¼·ÂÀÌ ´â¾Ò°í, È­¸é¿¡ º¸ÀÏ¶§¸¸ Ãâ·Â
+        // Ã¼ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ò°ï¿½, È­ï¿½é¿¡ ï¿½ï¿½ï¿½Ï¶ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
         if (currentHp < fullHp && currentHp > 0 && mainCamera.IsObjectVisible(currentRenderer))
         {
             GetComponent<Canvas>().enabled = true;

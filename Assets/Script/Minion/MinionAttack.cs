@@ -2,20 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using Photon.Bolt;
 
-public abstract class MinionAttack : MonoBehaviour
+public abstract class MinionAttack : EntityEventListener<ICusPlayerState>
 {
 	protected MinionInfo minionInfo;
 
 	private float attackClock = 0;
 
-	Animator animator;
-
 	public void Initialize(MinionInfo minionInfo)
 	{
 		this.minionInfo = minionInfo;
 		minionInfo.deathEvent.AddListener(Die);
-		animator = transform.parent.GetComponent<Animator>();
 	}
 
 	private void Die()
@@ -25,14 +23,13 @@ public abstract class MinionAttack : MonoBehaviour
 
 	protected abstract void AttackTarget();
 
-	private void Update()
+	public override void SimulateOwner()
 	{
 		attackClock += Time.deltaTime;
 		if (minionInfo.target != null && attackClock > minionInfo.attackSpeed && minionInfo.attacking)
 		{
 			attackClock = 0f;
 			AttackTarget();
-			animator.SetTrigger("ATTACK");
 		}
 	}
 

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Bolt;
 
 public class TowerControl : CommonObject
 {
@@ -19,6 +20,7 @@ public class TowerControl : CommonObject
 	{
 		this.towerInfo = towerInfo;
 		team = towerInfo.team;
+		state.Team = towerInfo.team;
 		transform.parent.GetComponentInChildren<TowerSensor>().Initialize(towerInfo);
 		GetComponent<TowerAttack>().Initialize(towerInfo, towerBulletHolder);
 		outline = GetComponentInChildren<cakeslice.Outline>();
@@ -36,6 +38,7 @@ public class TowerControl : CommonObject
 		{
 			towerInfo.hp -= attack.CalculateDamage(towerInfo.magicalDefence);
 		}
+		state.Health = towerInfo.hp;
 		if (towerInfo.hp <= 0 && dieCoroutine == null)
 		{
 			dieCoroutine = StartCoroutine(Die());
@@ -44,10 +47,10 @@ public class TowerControl : CommonObject
 
 	private IEnumerator Die()
 	{
-		// »ç¸Á ¾Ö´Ï¸ÞÀÌ¼Ç
+		// ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½
 		targetable = false;
 		GetComponent<Collider>().enabled = false;
-		// °æÇèÄ¡ ºÐ¹è
+		// ï¿½ï¿½ï¿½ï¿½Ä¡ ï¿½Ð¹ï¿½
 		GetComponent<ExpProvider>().ProvideExp(towerInfo.exp, towerInfo.team);
 
 		if(TryGetComponent(out TowerControl towerControl))
@@ -60,7 +63,7 @@ public class TowerControl : CommonObject
 		}
 
 		yield return new WaitForSeconds(0.5f);
-		Destroy(gameObject);
+	    BoltNetwork.Destroy(gameObject);
 	}
 
 	private void OnMouseOver()
@@ -78,6 +81,6 @@ public class TowerControl : CommonObject
 
 	public bool IsEnemy(int target)
 	{
-		return towerInfo.team.IsEnemy(target);
+		return state.Team.IsEnemy(target);
 	}
 }

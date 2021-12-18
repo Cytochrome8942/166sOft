@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Bolt;
 
 public class MinionSensor : EnemySensor
 {
@@ -15,7 +16,7 @@ public class MinionSensor : EnemySensor
 		GetComponent<SphereCollider>().radius = minionInfo.targetRange;
 	}
 
-	public void Update()
+    public override void SimulateOwner()
 	{
 		if ((minionTargets.Count != 0 || characterTargets.Count != 0) && (minionInfo.target == null || minionInfo.target.CompareTag("Path")))
 		{

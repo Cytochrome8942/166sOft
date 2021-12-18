@@ -1,12 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Bolt;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
+    public CameraControl cameraControl;
+    public CharacterControl characterControl;
     public CharacterInfo playerInfo;
+    public BoltEntity playerEntity;
 
     public SkillInfo skill1;
     public SkillInfo skill2;

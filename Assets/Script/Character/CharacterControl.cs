@@ -1,38 +1,39 @@
 using System.Collections;
 using UnityEngine;
 using UnityEditor;
+using Photon.Bolt;
 
 public class CharacterControl : CommonObject
 {
 	private CharacterMove characterMove;
 	private CharacterAttack characterAttack;
-	public CharacterSkill[] characterSkill;
+	public GameObject[] characterSkill;
 
 	public CharacterInfo characterInfo;
 
 	private int layermask = ~(1 << 2);
 
-	void Awake()
+
+    public override void Attached()
 	{
 		characterInfo.Reset();
-
+		characterInfo.team = (BoltGameInfo.isBlueTeam ? 0 : 1);
+		state.Team = characterInfo.team;
 		characterInfo.moveTarget = transform.position.YZero();
 
 		characterMove = GetComponent<CharacterMove>();
 		characterMove.characterInfo = characterInfo;
 		characterAttack = GetComponent<CharacterAttack>();
 		characterAttack.characterInfo = characterInfo;
-		for (int i = 0; i < characterSkill.Length; i++)
-		{
-			characterSkill[i].Initialize(characterInfo);
-		}
+
 		GetComponent<CharacterLevel>().characterInfo = characterInfo;
+		GameObject.Find("GameManager").GetComponent<GameManager>().playerEntity = entity;
 	}
 
 
 	public void RightClickInput(Vector3 mousePosition)
 	{
-		// RaycastAllÀº ¼ø¼­¸¦ º¸ÀåÇÏÁö ¾Ê±â ¶§¹®¿¡ ¿ì¼±¼øÀ§¿¡ µû¶ó µû·Î ÆÇÁ¤ÇØ¾ßÇÔ
+		// RaycastAllï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ì¼±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ø¾ï¿½ï¿½ï¿½
 
 		Ray ray = Camera.main.ScreenPointToRay(mousePosition);
 
@@ -41,7 +42,7 @@ public class CharacterControl : CommonObject
 
 		for (int i = 0; i<5; i++)
 		{
-			// ¹º°¡¿¡ ºÎµúÇû´Ù¸é
+			// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Îµï¿½ï¿½ï¿½ï¿½Ù¸ï¿½
 			if (Physics.Raycast(ray, out RaycastHit hit, 50f, layermask))
 			{
 				if (hit.transform.CompareTag("Minion"))
@@ -74,7 +75,7 @@ public class CharacterControl : CommonObject
 				{
 					if(hit.transform.TryGetComponent(out TowerControl towerControl))
 					{
-						if (towerControl.IsEnemy(characterInfo.team))
+ 						if (towerControl.IsEnemy(characterInfo.team))
 						{
 							characterAttack.AttackTargetSet(hit.transform);
 						}
@@ -118,20 +119,29 @@ public class CharacterControl : CommonObject
 		{
 			characterInfo.hp.add(- attack.CalculateDamage(characterInfo.magicalDefence.get()));
 		}
+		state.Health = characterInfo.hp.get();
 	}
-
+	public override void OnEvent(bulletHitEvent evnt){
+		Debug.Log("player D");
+		if(entity.IsOwner){
+			Damaged(evnt.Damage);
+		}
+	}
 	public void SkillShoot(Vector3 mousePosition, int skillNumber)
 	{
 		Ray ray = Camera.main.ScreenPointToRay(mousePosition);
 		for (int i = 0; i < 5; i++)
 		{
-			// ¹º°¡¿¡ ºÎµúÇû´Ù¸é
+			// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Îµï¿½ï¿½ï¿½ï¿½Ù¸ï¿½
 			if (Physics.Raycast(ray, out RaycastHit hit, 50f, layermask))
 			{
 				if (hit.transform.CompareTag("Ground"))
 				{
-					characterSkill[skillNumber].Enable(hit.point.YZero());
-					characterMove.MoveLock(characterSkill[skillNumber].skillInfo.beforeAttack + characterSkill[skillNumber].skillInfo.afterAttack);
+				 	var newSkill = BoltNetwork.Instantiate(characterSkill[skillNumber]);
+					var compo = newSkill.GetComponent<CharacterSkill>();
+					compo.Initialize(characterInfo);
+					compo.Enable(hit.point.YZero());
+					characterMove.MoveLock(compo.skillInfo.beforeAttack + compo.skillInfo.afterAttack);
 				}
 				else
 				{
@@ -149,6 +159,6 @@ public class CharacterControl : CommonObject
 
 	public bool IsEnemy(int target)
 	{
-		return characterInfo.team.IsEnemy(target);
+		return state.Team.IsEnemy(target);
 	}
 }

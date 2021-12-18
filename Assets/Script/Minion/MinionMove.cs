@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using Photon.Bolt;
 
-public class MinionMove : MonoBehaviour
+public class MinionMove : EntityBehaviour<IMinionState>
 {
 	[System.NonSerialized]
 	public GameObject[] path;
@@ -17,7 +18,10 @@ public class MinionMove : MonoBehaviour
 
 	private NavMeshAgent navMeshAgent;
 
-	private void Update()
+	public override void Attached(){
+		state.SetTransforms(state.Pos, transform.parent);
+	}
+    public override void SimulateOwner()
 	{
 		if(minionInfo.target != null)
 		{
@@ -58,7 +62,7 @@ public class MinionMove : MonoBehaviour
 				best = i;
 			}
 		}
-		// °¡Àå °¡±î¿î °æ·ÎÀÇ ´ÙÀ½ °æ·Î·Î ÀÌµ¿ÇÔ(µÚ·Î µ¹¾Æ°¡´Â Çö»ó ¹æÁö)
+		// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Î·ï¿½ ï¿½Ìµï¿½ï¿½ï¿½(ï¿½Ú·ï¿½ ï¿½ï¿½ï¿½Æ°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
 		currentPath = best + 1;
 		minionInfo.target = path[currentPath].transform;
 	}

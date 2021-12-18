@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Bolt;
 
-public class EnemySensor : MonoBehaviour
+public class EnemySensor : EntityBehaviour<IMinionState>
 {
 	protected List<Transform> minionTargets = new List<Transform>();
 	protected List<Transform> characterTargets = new List<Transform>();
@@ -78,30 +79,32 @@ public class EnemySensor : MonoBehaviour
 
 	protected void OnTriggerEnter(Collider other)
 	{
-		if (other.CompareTag("Minion"))
-		{
-			if (other.GetComponent<MinionControl>().IsEnemy(team))
+		if(entity.IsOwner){
+			if (other.CompareTag("Minion"))
 			{
-				minionTargets.Add(other.transform);
-			}
-		}
-		if (other.CompareTag("Player"))
-		{
-			if (other.GetComponent<CharacterControl>().IsEnemy(team))
-			{
-				characterTargets.Add(other.transform);
-			}
-		}
-		if (other.CompareTag("Facility"))
-		{
-			if(other.TryGetComponent(out TowerControl towerControl))
-			{
-				if (towerControl.IsEnemy(team))
+				if (other.GetComponent<MinionControl>().IsEnemy(team))
 				{
 					minionTargets.Add(other.transform);
 				}
 			}
-			// ³Ø¼­½º ¹× ¿ì¹° Ãß°¡
+			if (other.CompareTag("Player"))
+			{
+				if (other.GetComponent<CharacterControl>().IsEnemy(team))
+				{
+					characterTargets.Add(other.transform);
+				}
+			}
+			if (other.CompareTag("Facility"))
+			{
+				if(other.TryGetComponent(out TowerControl towerControl))
+				{
+					if (towerControl.IsEnemy(team))
+					{
+						minionTargets.Add(other.transform);
+					}
+				}
+				// ï¿½Ø¼ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ì¹° ï¿½ß°ï¿½
+			}
 		}
 	}
 

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Bolt;
 
 public class TowerSensor : EnemySensor
 {
@@ -14,12 +15,14 @@ public class TowerSensor : EnemySensor
 		GetComponent<SphereCollider>().radius = towerInfo.attackRange;
 	}
 
-	public void Update()
+	public override void SimulateOwner()
 	{
-		if (towerInfo.target == null)
-		{
-			SetNearestTarget();
+		if(BoltNetwork.IsServer){
+			if (towerInfo.target == null)
+			{
+				SetNearestTarget();
+			}
+			towerInfo.target = target;
 		}
-		towerInfo.target = target;
 	}
 }

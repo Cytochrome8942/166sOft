@@ -1,7 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
+using Photon.Bolt;
 
-public class CharacterHpBar : MonoBehaviour
+public class CharacterHpBar : EntityBehaviour<IMinionState>
 {
 	public FloatData fullHp;
 	public FloatData currentHp;
@@ -15,10 +16,10 @@ public class CharacterHpBar : MonoBehaviour
 	}
 
 	// Update is called once per frame
-	protected virtual void Update()
+	public override void SimulateOwner()
 	{
-		// Ç×»ó Ãâ·Â
-		hpBarImage.fillAmount = currentHp.get() / fullHp.get();
+		// ï¿½×»ï¿½ ï¿½ï¿½ï¿½
+		hpBarImage.fillAmount = state.Health / state.MaxHealth;
 		transform.LookAt(transform.position + mainCamera.transform.rotation * Vector3.forward, mainCamera.transform.rotation * Vector3.up);
 	}
 }

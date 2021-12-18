@@ -14,10 +14,11 @@ public class NexusControl : CommonObject
 
 	private int lockVal = 0;
 
-	private void Awake()
+	public override void Attached()
 	{
 		outline = GetComponentInChildren<cakeslice.Outline>();
 		nexusInfo = Instantiate(nexusInfo);
+		state.Team = nexusInfo.team;
 		transform.GetComponentInChildren<NexusHpBar>().Initialize(nexusInfo);
 	}
 
@@ -31,6 +32,7 @@ public class NexusControl : CommonObject
 		{
 			nexusInfo.hp -= attack.CalculateDamage(nexusInfo.magicalDefence);
 		}
+		state.Health = nexusInfo.hp;
 		if (nexusInfo.hp <= 0 && dieCoroutine == null)
 		{
 			dieCoroutine = StartCoroutine(Die());
@@ -39,7 +41,7 @@ public class NexusControl : CommonObject
 
 	private IEnumerator Die()
 	{
-		// »ç¸Á ¾Ö´Ï¸ÞÀÌ¼Ç
+		// ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½
 		GetComponent<Animator>().SetTrigger("DIE");
 
 		GetComponent<Collider>().enabled = false;
@@ -63,7 +65,7 @@ public class NexusControl : CommonObject
 
 	public bool IsEnemy(int target)
 	{
-		return nexusInfo.team.IsEnemy(target);
+		return state.Team.IsEnemy(target);
 	}
 
 	public void TowerDestroyed()

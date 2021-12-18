@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using Photon.Bolt;
 
-public class CharacterSkill : MonoBehaviour
+public class CharacterSkill : EntityBehaviour<IBulletState>
 {
 	private CharacterInfo characterInfo;
 
@@ -54,14 +55,18 @@ public class CharacterSkill : MonoBehaviour
 			{
 				if (targets[i].GetComponent<MinionControl>().IsEnemy(characterInfo.team))
 				{
-					targets[i].GetComponent<MinionControl>().Damaged(damage, skillInfo.isPhysical);
+					var e = bulletHitEvent.Create(targets[i].GetComponentInParent<BoltEntity>());
+					e.Damage = damage;
+					e.Send();
 				}
 			}
 			else if (targets[i].CompareTag("Player"))
 			{
 				if (targets[i].GetComponent<CharacterControl>().IsEnemy(characterInfo.team))
 				{
-					targets[i].GetComponent<CharacterControl>().Damaged(damage, skillInfo.isPhysical);
+					var e = bulletHitEvent.Create(targets[i].GetComponent<BoltEntity>());
+					e.Damage = damage;
+					e.Send(); 
 				}
 			}
 		}
@@ -72,5 +77,6 @@ public class CharacterSkill : MonoBehaviour
 
 		await Task.Delay(1000);
 		finishParticle.Stop();
+		BoltNetwork.Destroy(gameObject);
 	}
 }

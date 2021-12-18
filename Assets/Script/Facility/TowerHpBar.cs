@@ -17,7 +17,7 @@ public class NexusHpBar : HpBar
 	// Update is called once per frame
 	protected override void Update()
 	{
-		currentHp = nexusInfo.hp;
+		currentHp = state.Health;
 		base.Update();
 	}
 }

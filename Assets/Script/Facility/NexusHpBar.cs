@@ -17,7 +17,7 @@ public class TowerHpBar : HpBar
 	// Update is called once per frame
 	protected override void Update()
 	{
-		currentHp = towerInfo.hp;
+ 		currentHp = state.Health;
 		base.Update();
 	}
 }

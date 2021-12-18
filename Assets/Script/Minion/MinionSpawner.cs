@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Bolt;
 
 public class MinionSpawner : MonoBehaviour
 {
@@ -27,13 +28,15 @@ public class MinionSpawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        waveClock += Time.deltaTime;
+        if(BoltNetwork.IsServer){
+            waveClock += Time.deltaTime;
 
-        if(waveClock >= waveTime)
-		{
-            waveClock = 0f;
-            StartCoroutine(SpawnWave());
-		}
+            if(waveClock >= waveTime)
+            {
+                waveClock = 0f;
+                StartCoroutine(SpawnWave());
+            }
+        }
     }
 
     public IEnumerator SpawnWave()
@@ -49,20 +52,19 @@ public class MinionSpawner : MonoBehaviour
             GameObject newMinion = null;
             if (i < 3)
             {
-                newMinion = Instantiate(minionMelee, spawnPath[0].transform.position, transform.rotation);
+                newMinion = BoltNetwork.Instantiate(minionMelee, spawnPath[0].transform.position, transform.rotation);
             }
             else if(i == 3)
             {
-                newMinion = Instantiate(minionSiege, spawnPath[0].transform.position, transform.rotation);
+                newMinion = BoltNetwork.Instantiate(minionSiege, spawnPath[0].transform.position, transform.rotation);
                 newMinion.GetComponentInChildren<MinionSiegeAttack>().siegeBulletHolder = siegeBulletHolder;
             }
 			else
             {
-                newMinion = Instantiate(minionCaster, spawnPath[0].transform.position, transform.rotation);
+                newMinion = BoltNetwork.Instantiate(minionCaster, spawnPath[0].transform.position, transform.rotation);
                 newMinion.GetComponentInChildren<MinionCasterAttack>().casterBulletHolder = casterBulletHolder;
             }
             newMinion.GetComponentInChildren<MinionControl>().Initialize(spawnPath, team);
-            newMinion.transform.SetParent(transform);
         }
 	}
 }

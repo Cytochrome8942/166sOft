@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Bolt;
 
-public class CharacterAttack : MonoBehaviour
+public class CharacterAttack : EntityBehaviour<IMinionState>
 {
     [System.NonSerialized]
     public CharacterInfo characterInfo;
@@ -10,12 +11,11 @@ public class CharacterAttack : MonoBehaviour
 	[System.NonSerialized]
 	public CharacterMove characterMove;
 
-    //¿ø°Å¸® / ±Ù°Å¸®?
-    public GameObject characterBulletHolder;
-
+    //ï¿½ï¿½ï¿½Å¸ï¿½ / ï¿½Ù°Å¸ï¿½?
+	public GameObject characterBullet;
 	private Coroutine attackCoroutine;
 
-	//°ø°ÝÅ¸°Ù
+	//ï¿½ï¿½ï¿½ï¿½Å¸ï¿½ï¿½
 	private Transform target;
 
 	private void Awake()
@@ -23,22 +23,22 @@ public class CharacterAttack : MonoBehaviour
 		characterMove = GetComponent<CharacterMove>();
 	}
 
-	private void Update()
+	public override void SimulateOwner()
 	{
-		// Å¸°Ù ÀÖÀ½, »ç°Å¸® ÀÌ³», °ø°Ý°¡´É : °ø°Ý
+		// Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½Å¸ï¿½ ï¿½Ì³ï¿½, ï¿½ï¿½ï¿½Ý°ï¿½ï¿½ï¿½ : ï¿½ï¿½ï¿½ï¿½
 		if (target != null && Vector3.Distance(transform.position.YZero(), target.position.YZero()) < characterInfo.distancedRange 
 			&& characterInfo.attackClock > 0f)
 		{
 			characterInfo.attackClock = -characterInfo.attackSpeedAfter;
 			attackCoroutine = StartCoroutine(AttackTarget());
 		}
-		// Å¸°Ù ÀÖÀ½, »ç°Å¸® ÀÌ³», °ø°Ý ºÒ°¡´É : ´ë±â
+		// Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½Å¸ï¿½ ï¿½Ì³ï¿½, ï¿½ï¿½ï¿½ï¿½ ï¿½Ò°ï¿½ï¿½ï¿½ : ï¿½ï¿½ï¿½
 		else if (target != null && Vector3.Distance(transform.position.YZero(), target.position.YZero()) < characterInfo.distancedRange
 			&& characterInfo.attackClock <= 0f)
 		{
 			characterInfo.moveTarget = transform.position;
 		}
-		// Å¸°Ù ÀÖÀ½, »ç°Å¸® ¹Û, °ø°Ý°¡´É È¤Àº ºÒ°¡´É : ÃÖ´ë »ç°Å¸®±îÁö ÀÌµ¿
+		// Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½Å¸ï¿½ ï¿½ï¿½, ï¿½ï¿½ï¿½Ý°ï¿½ï¿½ï¿½ È¤ï¿½ï¿½ ï¿½Ò°ï¿½ï¿½ï¿½ : ï¿½Ö´ï¿½ ï¿½ï¿½Å¸ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½
 		else if (target != null && Vector3.Distance(transform.position.YZero(), target.position.YZero()) > characterInfo.distancedRange)
 		{
 			characterInfo.moveTarget = target.position;
@@ -56,7 +56,7 @@ public class CharacterAttack : MonoBehaviour
 		characterInfo.moveTarget = transform.position;
 		characterMove.MoveLock(characterInfo.attackSpeedBefore, true, true);
 
-		//¼±µôµ¿¾È Àû ¹Ù¶óº¸±â
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ù¶óº¸±ï¿½
 		Vector3 moveTarget = target.position.YZero();
 		Quaternion startedRotation = transform.rotation;
 		Vector3 rotateTarget = (moveTarget - transform.position).normalized;
@@ -69,7 +69,8 @@ public class CharacterAttack : MonoBehaviour
 			yield return null;
 		}
 
-		characterBulletHolder.transform.GetChild(0).GetComponent<CharacterBullet>().Enable(target, transform.position.YZero() + new Vector3(0, 1, 0));
+		var bullet = BoltNetwork.Instantiate(characterBullet);
+		bullet.GetComponent<CharacterBullet>().Enable(target, transform.position.YZero() + new Vector3(0, 1, 0), characterInfo);
 	}
 
 	public void CancelAttack()

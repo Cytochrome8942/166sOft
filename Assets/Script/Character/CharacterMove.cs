@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using Photon.Bolt;
 
-public class CharacterMove : MonoBehaviour
+public class CharacterMove : EntityBehaviour<IMinionState>
 {
 	[System.NonSerialized]
 	public CharacterAttack characterAttack;
@@ -12,20 +13,35 @@ public class CharacterMove : MonoBehaviour
 
 	public CharacterInfo characterInfo;
 
-	//ÀÌµ¿
+	//ï¿½Ìµï¿½
 	public GameObject moveParticleHolder;
 
 	[System.NonSerialized]
 	public NavMeshAgent navMeshAgent;
 
-	void Awake()
+	public override void Attached()
 	{
 		animator = GetComponent<Animator>();
 		navMeshAgent = GetComponent<NavMeshAgent>();
 		characterAttack = GetComponent<CharacterAttack>();
+		state.SetAnimator(animator);
+		Debug.LogWarning("aaa");
+
+		state.SetTransforms(state.Pos, transform);
+		if(entity.IsOwner){
+			Debug.LogWarning("www");
+			moveParticleHolder = GameObject.Find("GroundParticleHolder");
+			GameObject.Find("InputController").GetComponent<InputControl>().characterControl = gameObject.GetComponent<CharacterControl>();
+			GameObject.Find("GameManager").GetComponent<GameManager>().characterControl = gameObject.GetComponent<CharacterControl>();
+			GameObject.Find("Main Camera").GetComponent<CameraControl>().character = gameObject;
+			GameObject.Find("Main Camera").GetComponent<CameraControl>().init();
+			GetComponent<CharacterLevel>().characterInfo = characterInfo;
+
+			//characterInfo.team = state.isBlueTeam ? 1 : 0;
+		}
 	}
 	
-	private void LateUpdate()
+	public override void SimulateOwner()
 	{
 		if (characterInfo.movableClock > 0f)
 		{
@@ -49,16 +65,20 @@ public class CharacterMove : MonoBehaviour
 
 		if (navMeshAgent.velocity == Vector3.zero)
 		{
-			animator.SetBool("Move", false);
+			state.isMoving = false;
 		}
 		else
 		{
-			animator.SetBool("Move", true);
+			state.isMoving = true;
 		}
 
 
 		characterInfo.movableClock += Time.deltaTime;
 		characterInfo.rotatableClock += Time.deltaTime;
+	}
+
+	public void Update(){
+		animator.SetBool("Move", state.isMoving);
 	}
 	
 	public void MoveTo(RaycastHit hit)
@@ -66,7 +86,7 @@ public class CharacterMove : MonoBehaviour
 		characterAttack.CancelAttack();
 		characterInfo.moveTarget = new Vector3(hit.point.x, 0, hit.point.z);
 
-		//¹Ù´Ú¿¡ ÀÌÆåÆ®
+		//ï¿½Ù´Ú¿ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
 		Transform child = moveParticleHolder.transform.GetChild(0);
 		child.position = characterInfo.moveTarget + new Vector3(0, 0.2f, 0);
 		child.GetComponent<ParticleSystem>().Play();
@@ -76,7 +96,7 @@ public class CharacterMove : MonoBehaviour
 
 	public void MoveLock(float time, bool moveLock = true, bool rotateLock = true)
 	{
-		// clock ÀÌ ¼³Á¤ÇÏ·Á´Â timeº¸´Ù Å¬ °æ¿ì timeÀ¸·Î ÄðÅ¸ÀÓ ¼³Á¤, ÀÌ¿Ü¿¡´Â ¹«½Ã (Áßº¹ Lock)
+		// clock ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½ï¿½ timeï¿½ï¿½ï¿½ï¿½ Å¬ ï¿½ï¿½ï¿½ timeï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½, ï¿½Ì¿Ü¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (ï¿½ßºï¿½ Lock)
 		if(moveLock && characterInfo.movableClock > -time)
 		{
 			characterInfo.movableClock = -time;

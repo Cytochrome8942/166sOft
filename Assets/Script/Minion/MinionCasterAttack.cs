@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Bolt;
 
 public class MinionCasterAttack : MinionAttack
 {
 	[System.NonSerialized]
 	public GameObject casterBulletHolder;
+	public GameObject minionBullet;
 
 	protected override void AttackTarget()
 	{
@@ -21,7 +23,10 @@ public class MinionCasterAttack : MinionAttack
 		}
 		else if (!minionInfo.target.CompareTag("Path"))
 		{
-			casterBulletHolder.transform.GetChild(0).GetComponent<EnemyBullet>().Enable(minionInfo.target, transform.position.YZero() + new Vector3(0, 1, 0), minionInfo.attackDamage);
+			if(entity.IsOwner){
+				var bullet = BoltNetwork.Instantiate(minionBullet);
+				bullet.GetComponent<EnemyBullet>().Enable(minionInfo.target, transform.position.YZero() + new Vector3(0, 1, 0), minionInfo.attackDamage);
+			}
 		}
 		minionInfo.attacking = false;
 	}
