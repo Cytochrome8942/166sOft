@@ -12,12 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da3115371f30a50469835c7539b12f9b, type: 3}
   m_Name: Skill2
   m_EditorClassIdentifier: 
-  beforeAttack: 0
-  afterAttack: 0
-  cooldown: 0
+  beforeAttack: 0.5
+  afterAttack: 0.5
+  cooldown: 5
   isPhysical: 0
-  damage: 0
-  startParticle: {fileID: 0}
-  middleParticle: {fileID: 0}
-  endParticle: {fileID: 0}
-  skillType: 0
+  damageRate: 1
+  damage: 3
+  skillType: 2
+  boolValue: 1
+  value1: 5
+  value2: 1
+  value3: 1
