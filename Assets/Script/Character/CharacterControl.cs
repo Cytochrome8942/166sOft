@@ -120,6 +120,10 @@ public class CharacterControl : CommonObject
 			characterInfo.hp.add(- attack.CalculateDamage(characterInfo.magicalDefence.get()));
 		}
 		state.Health = characterInfo.hp.get();
+		if(state.Health <= 0)
+		{
+
+		}
 	}
 	public override void OnEvent(bulletHitEvent evnt){
 		Debug.Log("player D");
