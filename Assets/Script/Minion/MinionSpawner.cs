@@ -19,9 +19,6 @@ public class MinionSpawner : MonoBehaviour
     public GameObject minionSiege;
     public GameObject minionCaster;
 
-    public GameObject casterBulletHolder;
-    public GameObject siegeBulletHolder;
-
     public int team;
 
 
@@ -57,12 +54,10 @@ public class MinionSpawner : MonoBehaviour
             else if(i == 3)
             {
                 newMinion = BoltNetwork.Instantiate(minionSiege, spawnPath[0].transform.position, transform.rotation);
-                newMinion.GetComponentInChildren<MinionSiegeAttack>().siegeBulletHolder = siegeBulletHolder;
             }
 			else
             {
                 newMinion = BoltNetwork.Instantiate(minionCaster, spawnPath[0].transform.position, transform.rotation);
-                newMinion.GetComponentInChildren<MinionCasterAttack>().casterBulletHolder = casterBulletHolder;
             }
             newMinion.GetComponentInChildren<MinionControl>().Initialize(spawnPath, team);
         }

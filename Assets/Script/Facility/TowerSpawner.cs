@@ -14,11 +14,11 @@ public class TowerSpawner : MonoBehaviour
             
             if(!isBlueTeam){
                 towerInfo.team = 0;
-                newTower.GetComponentInChildren<TowerControl>().Initialize(Instantiate(towerInfo), null);
+                newTower.GetComponentInChildren<TowerControl>().Initialize(Instantiate(towerInfo));
             }
             else{
                 towerInfo.team = 1;
-                newTower.GetComponentInChildren<TowerControl>().Initialize(Instantiate(towerInfo), null);
+                newTower.GetComponentInChildren<TowerControl>().Initialize(Instantiate(towerInfo));
             }
         }
     }

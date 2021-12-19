@@ -563,9 +563,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 215ebb79c4b248648bddb83f87ea8b68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  redBullet: {fileID: 8722231375622607580, guid: bcb19d99d710b6b45a8b74c66eff6835,
-    type: 3}
-  blueBullet: {fileID: 3606936535056763569, guid: bbf493cc3313f9f40b29727a8af43338,
+  towerBullet: {fileID: 8387932976778418484, guid: b10e64edf37c02743899020864090413,
     type: 3}
 --- !u!1001 &2155146669774431732
 PrefabInstance:
