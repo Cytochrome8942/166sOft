@@ -621,6 +621,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4736493529957118491}
   - component: {fileID: 5746784032709041584}
+  - component: {fileID: 7493576935566600530}
   m_Layer: 0
   m_Name: Circle
   m_TagString: Facility
@@ -699,6 +700,20 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.11060619, y: 6.2945714, z: -0.14314747}
     m_Extent: {x: 12.929462, y: 6.127789, z: 12.929458}
   m_DirtyAABB: 0
+--- !u!114 &7493576935566600530
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7592690694591920698}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbf3575480402db40813e763382412fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  color: 0
+  eraseRenderer: 1
 --- !u!1 &7888919439783740272
 GameObject:
   m_ObjectHideFlags: 0

@@ -14,19 +14,16 @@ public class TowerControl : CommonObject
 
 	Coroutine dieCoroutine;
 
-	public GameObject nextTarget;
+	public GameObject[] nextTargets;
 
-	public void Initialize(TowerInfo towerInfo, GameObject towerBulletHolder, bool setTargetable = false)
+	public void Initialize(TowerInfo towerInfo, bool setTargetable = false)
 	{
 		this.towerInfo = towerInfo;
 		team = towerInfo.team;
 		state.MaxHealth = towerInfo.hp;
 		state.Team = towerInfo.team;
 		transform.parent.GetComponentInChildren<TowerSensor>().Initialize(towerInfo);
-		GetComponent<TowerAttack>().Initialize(towerInfo, towerBulletHolder);
-		//outline = GetComponentInChildren<cakeslice.Outline>();
-		//transform.GetComponentInChildren<TowerHpBar>().Initialize();
-		//targetable = setTargetable;
+		GetComponent<TowerAttack>().Initialize(towerInfo);
 	}
 	public override void Attached(){
 		outline = GetComponentInChildren<cakeslice.Outline>();
@@ -65,13 +62,15 @@ public class TowerControl : CommonObject
 		// ����ġ �й�
 		GetComponent<ExpProvider>().ProvideExp(towerInfo.exp, towerInfo.team);
 
-		if(TryGetComponent(out TowerControl towerControl))
-		{
-			towerControl.targetable = true;
-		}
-		else if(TryGetComponent(out NexusControl nexusControl))
-		{
-			nexusControl.TowerDestroyed();
+		foreach (GameObject go in nextTargets) {
+			if (go.TryGetComponent(out TowerControl towerControl))
+			{
+				towerControl.targetable = true;
+			}
+			else if (go.TryGetComponent(out NexusControl nexusControl))
+			{
+				nexusControl.TowerDestroyed();
+			}
 		}
 
 		yield return new WaitForSeconds(0.5f);
@@ -80,7 +79,7 @@ public class TowerControl : CommonObject
 
 	private void OnMouseOver()
 	{
-		if (!(targetable && GameManager.instance.playerEntity.GetState<IMinionState>().Team.IsEnemy(state.Team)))
+		if (targetable && GameManager.instance.playerEntity.GetState<IMinionState>().Team.IsEnemy(state.Team))
 		{
 			outline.eraseRenderer = false;
 		}

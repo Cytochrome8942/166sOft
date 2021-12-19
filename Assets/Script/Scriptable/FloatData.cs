@@ -22,6 +22,6 @@ public class FloatData : DataInterface
 	}
 
 	public override void SetText(TMPro.TextMeshProUGUI target) {
-		target.text = value.ToString();
+		target.text = value.ToString("F1");
 	}
 }

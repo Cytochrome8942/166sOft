@@ -5,8 +5,6 @@ using Photon.Bolt;
 
 public class MinionSiegeAttack : MinionAttack
 {
-	[System.NonSerialized]
-	public GameObject siegeBulletHolder;
 	public GameObject enemyBullet;
 
 	protected override void AttackTarget()
