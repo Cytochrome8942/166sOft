@@ -162,8 +162,6 @@ public class CharacterControl : CommonObject
 			{
 				if (hit.transform.CompareTag("Ground"))
 				{
-				 	var newSkill = BoltNetwork.Instantiate(characterSkill[skillNumber], hit.point.YZero(), Quaternion.identity);
-
 					float damage;
 					var skillInfo = characterSkill[skillNumber].GetComponent<CharacterSkill>().skillInfo;
 					if (skillInfo.isPhysical) {
@@ -174,7 +172,8 @@ public class CharacterControl : CommonObject
 						damage = skillInfo.damageRate * characterInfo.magicalAttack.get() + skillInfo.damage;
 					}
 
-					var skillevent = SkillEvent.Create(newSkill);
+					var skillevent = SkillEvent.Create();
+					skillevent.Pos = hit.point.YZero();
 					skillevent.Damage = damage;
 					skillevent.Team = state.Team;
 					
