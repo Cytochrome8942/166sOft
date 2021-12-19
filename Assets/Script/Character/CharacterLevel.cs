@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Bolt;
 
-public class CharacterLevel : MonoBehaviour
+public class CharacterLevel : EntityBehaviour<IMinionState>
 {
     [System.NonSerialized]
     public CharacterInfo characterInfo;
@@ -13,6 +14,7 @@ public class CharacterLevel : MonoBehaviour
 		{
 			characterInfo.exp.add(-characterInfo.expMax.get());
 			characterInfo.LevelUp();
+			state.Level = characterInfo.level.get();
 		}
 	}
 }

@@ -9,21 +9,16 @@ public class HpBar : EntityBehaviour<IMinionState>
     public float fullHp;
     public float currentHp;
     public Image hpBarImage;
-    public Renderer currentRenderer;
 
     protected float barHeight;
 
     private Camera mainCamera;
 
-    void Awake()
+    public override void Attached()
     {
         mainCamera = Camera.main;
-        if (currentRenderer == null)
-        {
-            currentRenderer = transform.parent.parent.GetComponentInChildren<Renderer>();
-        }
+        
     }
-
     protected void Init()
     {
         GetComponent<Canvas>().enabled = false;
@@ -33,10 +28,10 @@ public class HpBar : EntityBehaviour<IMinionState>
     protected virtual void Update()
     {
         // ü���� ��Ұ�, ȭ�鿡 ���϶��� ���
-        if (currentHp < fullHp && currentHp > 0 && mainCamera.IsObjectVisible(currentRenderer))
+        if (state.Health < state.MaxHealth && state.Health > 0)
         {
             GetComponent<Canvas>().enabled = true;
-            hpBarImage.fillAmount = currentHp / fullHp;
+            hpBarImage.fillAmount = state.Health / state.MaxHealth;
             transform.LookAt(transform.position + mainCamera.transform.rotation * Vector3.forward, mainCamera.transform.rotation * Vector3.up);
             transform.position = transform.parent.position + transform.up * barHeight;
 		}

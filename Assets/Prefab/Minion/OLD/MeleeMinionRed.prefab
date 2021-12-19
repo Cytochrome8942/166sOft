@@ -424,6 +424,7 @@ GameObject:
   - component: {fileID: 4794923108872212534}
   - component: {fileID: 4972049119372033375}
   - component: {fileID: 7880450639652492950}
+  - component: {fileID: -8978094575987094527}
   m_Layer: 0
   m_Name: MeleeMinionRed
   m_TagString: Untagged
@@ -489,6 +490,35 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &-8978094575987094527
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5314579085317606028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 155943207, guid: 5b00bf8b25851d440940a40ec23344f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _sceneGuid: 
+  _serializerGuid: 7f529cff-e8d5-4fc9-b4b1-d968ce7013fd
+  _prefabId: 16
+  _updateRate: 1
+  _autoFreezeProxyFrames: 0
+  _clientPredicted: 1
+  _allowInstantiateOnClient: 1
+  _persistThroughSceneLoads: 0
+  _sceneObjectDestroyOnDetach: 1
+  _sceneObjectAutoAttach: 1
+  _alwaysProxy: 0
+  _detachOnDisable: 1
+  _allowFirstReplicationWhenFrozen: 0
+  _autoRemoveChildEntities: 0
+  _entityBehaviourQueryOption: 0
+  _entityPriorityCalculatorQueryOption: 1
+  _entityReplicationFilterQueryOption: 1
 --- !u!1 &7005529375542789453
 GameObject:
   m_ObjectHideFlags: 0
@@ -615,6 +645,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4483940888871436456}
     m_Modifications:
+    - target: {fileID: 4126452002553096609, guid: 273fcee7ba32a674aa979e5b15d9ee5f,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4126452002553096609, guid: 273fcee7ba32a674aa979e5b15d9ee5f,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4126452003484774752, guid: 273fcee7ba32a674aa979e5b15d9ee5f,
         type: 3}
       propertyPath: m_Pivot.x

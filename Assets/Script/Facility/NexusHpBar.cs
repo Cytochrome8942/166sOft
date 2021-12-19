@@ -4,13 +4,11 @@ using UnityEngine;
 
 public class TowerHpBar : HpBar
 {
-	private TowerInfo towerInfo;
 
-	public void Initialize(TowerInfo towerInfo)
+	public void Initialize()
 	{
-		this.towerInfo = towerInfo;
 		barHeight = 5f;
-		fullHp = towerInfo.hp;
+		fullHp = state.MaxHealth;
 		Init();
 	}
 

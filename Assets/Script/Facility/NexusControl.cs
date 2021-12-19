@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Bolt;
 
 public class NexusControl : CommonObject
 {
@@ -39,6 +40,12 @@ public class NexusControl : CommonObject
 		}
 	}
 
+	public override void OnEvent(bulletHitEvent evnt){
+		if(entity.IsOwner){
+			Damaged(evnt.Damage);
+		}
+	}
+
 	private IEnumerator Die()
 	{
 		// ��� �ִϸ��̼�
@@ -52,7 +59,7 @@ public class NexusControl : CommonObject
 
 	private void OnMouseOver()
 	{
-		if (GameManager.instance.playerInfo.team.IsEnemy(nexusInfo.team))
+		if (!(GameManager.instance.playerEntity.GetState<IMinionState>().Team.IsEnemy(state.Team)))
 		{
 			outline.eraseRenderer = false;
 		}

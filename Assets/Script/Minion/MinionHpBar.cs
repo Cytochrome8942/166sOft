@@ -4,14 +4,10 @@ using UnityEngine;
 
 public class MinionHpBar : HpBar
 {
-	private MinionInfo minionInfo;
-
-	public void Initialize(MinionInfo minionInfo)
+	public void Initialize()
 	{
-		this.minionInfo = minionInfo;
-		fullHp = minionInfo.hp;
+		fullHp = state.MaxHealth;
 		barHeight = 1f;
-		hpBarImage.color = minionInfo.team % 2 == 0 ? Color.red : Color.blue;
 		Init();
 	}
 

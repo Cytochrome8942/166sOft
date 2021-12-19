@@ -523,7 +523,6 @@ GameObject:
   - component: {fileID: 9118388862832231530}
   - component: {fileID: 9118388862832231532}
   - component: {fileID: 9118388862832231533}
-  - component: {fileID: 9118388862832231535}
   m_Layer: 0
   m_Name: fullHp
   m_TagString: Untagged
@@ -588,21 +587,6 @@ MonoBehaviour:
   m_FillOrigin: 1
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &9118388862832231535
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9118388862832231531}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd780d935ea38cc45be3115c645fc6fe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fullGauge: {fileID: 9118388862832231533}
-  target: {fileID: 11400000, guid: 9e3cf4c74103fe040a1eab8f0e36efd2, type: 2}
-  full: {fileID: 11400000, guid: b29be693d2df92e4e926c0edc704967f, type: 2}
 --- !u!1 &9118388862920320212
 GameObject:
   m_ObjectHideFlags: 0
@@ -1213,8 +1197,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c40da10b52f47e344800bae952e2be70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fullHp: {fileID: 11400000, guid: b29be693d2df92e4e926c0edc704967f, type: 2}
-  currentHp: {fileID: 11400000, guid: 9e3cf4c74103fe040a1eab8f0e36efd2, type: 2}
   hpBarImage: {fileID: 9118388862832231533}
 --- !u!1 &9118388864485602254
 GameObject:

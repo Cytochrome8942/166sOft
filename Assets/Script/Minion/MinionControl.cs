@@ -24,10 +24,10 @@ public class MinionControl : CommonObject
 		minionInfo = Instantiate(setInfo);
 		minionInfo.team = team;
 		state.Team = minionInfo.team;
+		state.MaxHealth = minionInfo.hp;
 
 		// *** N��
-
-		GetComponentInChildren<MinionHpBar>().Initialize(minionInfo);
+		GetComponentInChildren<MinionHpBar>().Initialize();
 
 		minionCollider = GetComponent<CapsuleCollider>();
 
@@ -40,7 +40,8 @@ public class MinionControl : CommonObject
 		minionSensor.Initialize(minionInfo);
 	}
 	public override void Attached(){
-		outline = GetComponentInChildren<cakeslice.Outline>();
+		outline = transform.parent.GetComponentInChildren<cakeslice.Outline>();
+		GetComponentInChildren<MinionHpBar>().Initialize();
 	}
 	public void Damaged(float attack, bool isPhysical = true)
 	{
@@ -86,7 +87,7 @@ public class MinionControl : CommonObject
 
 	private void OnMouseOver()
 	{
-		if (targetable && GameManager.instance.playerEntity.GetState<IMinionState>().Team.IsEnemy(state.Team))
+		if (!(targetable && GameManager.instance.playerEntity.GetState<IMinionState>().Team.IsEnemy(state.Team)))
 		{
 			outline.eraseRenderer = false;
 		}

@@ -41,6 +41,7 @@ GameObject:
   - component: {fileID: 1334295435155691962}
   - component: {fileID: 1517405064674101989}
   - component: {fileID: 5816124402791168543}
+  - component: {fileID: 324417817848188408}
   m_Layer: 0
   m_Name: SiegeMinionBlue
   m_TagString: Untagged
@@ -106,6 +107,35 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &324417817848188408
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1859861355051418368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 155943207, guid: 5b00bf8b25851d440940a40ec23344f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _sceneGuid: 
+  _serializerGuid: 7f529cff-e8d5-4fc9-b4b1-d968ce7013fd
+  _prefabId: 17
+  _updateRate: 1
+  _autoFreezeProxyFrames: 0
+  _clientPredicted: 1
+  _allowInstantiateOnClient: 1
+  _persistThroughSceneLoads: 0
+  _sceneObjectDestroyOnDetach: 1
+  _sceneObjectAutoAttach: 1
+  _alwaysProxy: 0
+  _detachOnDisable: 1
+  _allowFirstReplicationWhenFrozen: 0
+  _autoRemoveChildEntities: 0
+  _entityBehaviourQueryOption: 0
+  _entityPriorityCalculatorQueryOption: 1
+  _entityReplicationFilterQueryOption: 1
 --- !u!1 &4544113805774725102
 GameObject:
   m_ObjectHideFlags: 0
@@ -368,6 +398,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e51efc2754bbc4e4294f4e267828ec21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyBullet: {fileID: 3606936535056763569, guid: bbf493cc3313f9f40b29727a8af43338,
+    type: 3}
 --- !u!114 &5816124402791168538
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -19,6 +19,8 @@ public class CharacterControl : CommonObject
 		characterInfo.Reset();
 		characterInfo.team = (BoltGameInfo.isBlueTeam ? 0 : 1);
 		state.Team = characterInfo.team;
+		state.MaxHealth = characterInfo.fullHp.get();
+		state.Health = characterInfo.fullHp.get();
 		characterInfo.moveTarget = transform.position.YZero();
 
 		characterMove = GetComponent<CharacterMove>();
@@ -122,8 +124,8 @@ public class CharacterControl : CommonObject
 		state.Health = characterInfo.hp.get();
 	}
 	public override void OnEvent(bulletHitEvent evnt){
-		Debug.Log("player D");
 		if(entity.IsOwner){
+			Debug.LogWarning("player D");
 			Damaged(evnt.Damage);
 		}
 	}
@@ -137,11 +139,24 @@ public class CharacterControl : CommonObject
 			{
 				if (hit.transform.CompareTag("Ground"))
 				{
-				 	var newSkill = BoltNetwork.Instantiate(characterSkill[skillNumber]);
-					var compo = newSkill.GetComponent<CharacterSkill>();
-					compo.Initialize(characterInfo);
-					compo.Enable(hit.point.YZero());
-					characterMove.MoveLock(compo.skillInfo.beforeAttack + compo.skillInfo.afterAttack);
+				 	var newSkill = BoltNetwork.Instantiate(characterSkill[skillNumber], hit.point.YZero(), Quaternion.identity);
+
+					float damage;
+					var skillInfo = characterSkill[skillNumber].GetComponent<CharacterSkill>().skillInfo;
+					if (skillInfo.isPhysical) {
+						damage = skillInfo.damageRate * characterInfo.physicalAttack.get() + skillInfo.damage;
+					}
+					else
+					{
+						damage = skillInfo.damageRate * characterInfo.magicalAttack.get() + skillInfo.damage;
+					}
+
+					var skillevent = SkillEvent.Create(newSkill);
+					skillevent.Damage = damage;
+					skillevent.Team = state.Team;
+					
+					skillevent.Send();
+					characterMove.MoveLock(skillInfo.beforeAttack + skillInfo.afterAttack);
 				}
 				else
 				{

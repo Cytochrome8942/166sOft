@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Photon.Bolt;
 
-public class CharacterSkill : EntityBehaviour<IBulletState>
+public class CharacterSkill : EntityEventListener<IBulletState>
 {
 	private CharacterInfo characterInfo;
 
@@ -15,7 +15,10 @@ public class CharacterSkill : EntityBehaviour<IBulletState>
 	public ParticleSystem activeParticle;
 	public ParticleSystem finishParticle;
 
-
+	public override void OnEvent(SkillEvent s){
+		Debug.LogWarning("wow Event");
+		Enable(transform.position, s.Team, s.Damage);
+	}
 	private void Awake()
 	{
 		if (skillInfo.skillType == SkillInfo.SkillType.Circle)
@@ -30,7 +33,7 @@ public class CharacterSkill : EntityBehaviour<IBulletState>
 		this.characterInfo = characterInfo;
 	}
 
-	public async void Enable(Vector3 targetPosition)
+	public async void Enable(Vector3 targetPosition, int teamNum, float damage)
 	{
 		transform.position = targetPosition;
 		beforeParticle.Play();
@@ -41,19 +44,11 @@ public class CharacterSkill : EntityBehaviour<IBulletState>
 		Collider[] targets = new Collider[20];
 		int colliderAmount = Physics.OverlapSphereNonAlloc(targetPosition.YZero(), skillInfo.value1, targets, 1, QueryTriggerInteraction.Collide);
 
-		float damage;
-		if (skillInfo.isPhysical) {
-			damage = skillInfo.damageRate * characterInfo.physicalAttack.get() + skillInfo.damage;
-		}
-		else
-		{
-			damage = skillInfo.damageRate * characterInfo.magicalAttack.get() + skillInfo.damage;
-		}
 		for (int i = 0; i < colliderAmount; i++)
 		{
 			if (targets[i].CompareTag("Minion"))
 			{
-				if (targets[i].GetComponent<MinionControl>().IsEnemy(characterInfo.team))
+				if (targets[i].GetComponent<MinionControl>().IsEnemy(teamNum))
 				{
 					var e = bulletHitEvent.Create(targets[i].GetComponentInParent<BoltEntity>());
 					e.Damage = damage;
@@ -62,7 +57,7 @@ public class CharacterSkill : EntityBehaviour<IBulletState>
 			}
 			else if (targets[i].CompareTag("Player"))
 			{
-				if (targets[i].GetComponent<CharacterControl>().IsEnemy(characterInfo.team))
+				if (targets[i].GetComponent<CharacterControl>().IsEnemy(teamNum))
 				{
 					var e = bulletHitEvent.Create(targets[i].GetComponent<BoltEntity>());
 					e.Damage = damage;

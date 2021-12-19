@@ -10,7 +10,7 @@ public class NexusHpBar : HpBar
 	{
 		this.nexusInfo = nexusInfo;
 		barHeight = 5f;
-		fullHp = nexusInfo.hp;
+		fullHp = state.MaxHealth;
 		Init();
 	}
 

@@ -70,6 +70,14 @@ public class CharacterBullet : EntityBehaviour<IBulletState>
 				hitEvent.Send();
 				StartCoroutine(Disable());
 			}
+			if(other.CompareTag("Player") && other.transform == target)
+			{
+				Debug.LogWarning("player hit");
+				var hitEvent = bulletHitEvent.Create(other.gameObject.GetComponent<BoltEntity>());
+				hitEvent.Damage = characterInfo.physicalAttack.get();
+				hitEvent.Send();
+				StartCoroutine(Disable());
+			}
 		}
 	}
 

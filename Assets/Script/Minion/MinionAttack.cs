@@ -4,12 +4,19 @@ using UnityEngine;
 using UnityEngine.AI;
 using Photon.Bolt;
 
-public abstract class MinionAttack : EntityEventListener<ICusPlayerState>
+public abstract class MinionAttack : EntityEventListener<IMinionState>
 {
 	protected MinionInfo minionInfo;
 
 	private float attackClock = 0;
 
+	Animator animator;
+
+	public override void Attached(){
+		animator = transform.parent.GetComponent<Animator>();
+		state.SetAnimator(animator);
+		state.OnisAttacking += attackCallback;
+	}
 	public void Initialize(MinionInfo minionInfo)
 	{
 		this.minionInfo = minionInfo;
@@ -30,7 +37,12 @@ public abstract class MinionAttack : EntityEventListener<ICusPlayerState>
 		{
 			attackClock = 0f;
 			AttackTarget();
+			state.isAttacking();
 		}
+	}
+
+	public void attackCallback(){
+		animator.SetTrigger("ATTACK");
 	}
 
 	protected IEnumerator Rotate()

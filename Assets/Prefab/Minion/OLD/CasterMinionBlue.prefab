@@ -224,6 +224,7 @@ GameObject:
   - component: {fileID: 2402837424340544339}
   - component: {fileID: 2797349537298314789}
   - component: {fileID: 7047123675255633610}
+  - component: {fileID: -7969535084908008881}
   m_Layer: 0
   m_Name: CasterMinionBlue
   m_TagString: Untagged
@@ -289,6 +290,35 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &-7969535084908008881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3031845333687955945}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 155943207, guid: 5b00bf8b25851d440940a40ec23344f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _sceneGuid: 
+  _serializerGuid: 7f529cff-e8d5-4fc9-b4b1-d968ce7013fd
+  _prefabId: 13
+  _updateRate: 1
+  _autoFreezeProxyFrames: 0
+  _clientPredicted: 1
+  _allowInstantiateOnClient: 1
+  _persistThroughSceneLoads: 0
+  _sceneObjectDestroyOnDetach: 1
+  _sceneObjectAutoAttach: 1
+  _alwaysProxy: 0
+  _detachOnDisable: 1
+  _allowFirstReplicationWhenFrozen: 0
+  _autoRemoveChildEntities: 0
+  _entityBehaviourQueryOption: 0
+  _entityPriorityCalculatorQueryOption: 1
+  _entityReplicationFilterQueryOption: 1
 --- !u!1 &5149735230361940359
 GameObject:
   m_ObjectHideFlags: 0
@@ -368,6 +398,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3db6af19a8870e4f8a750955bf5837c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  minionBullet: {fileID: 3606936535056763569, guid: bbf493cc3313f9f40b29727a8af43338,
+    type: 3}
 --- !u!114 &6669114518139214101
 MonoBehaviour:
   m_ObjectHideFlags: 0

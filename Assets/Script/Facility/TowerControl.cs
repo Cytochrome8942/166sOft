@@ -20,12 +20,18 @@ public class TowerControl : CommonObject
 	{
 		this.towerInfo = towerInfo;
 		team = towerInfo.team;
+		state.MaxHealth = towerInfo.hp;
 		state.Team = towerInfo.team;
 		transform.parent.GetComponentInChildren<TowerSensor>().Initialize(towerInfo);
 		GetComponent<TowerAttack>().Initialize(towerInfo, towerBulletHolder);
+		//outline = GetComponentInChildren<cakeslice.Outline>();
+		//transform.GetComponentInChildren<TowerHpBar>().Initialize();
+		//targetable = setTargetable;
+	}
+	public override void Attached(){
 		outline = GetComponentInChildren<cakeslice.Outline>();
-		transform.GetComponentInChildren<TowerHpBar>().Initialize(towerInfo);
-		targetable = setTargetable;
+		transform.GetComponentInChildren<TowerHpBar>().Initialize();
+		targetable = false;
 	}
 
 	public void Damaged(float attack, bool isPhysical = true)
@@ -42,6 +48,12 @@ public class TowerControl : CommonObject
 		if (towerInfo.hp <= 0 && dieCoroutine == null)
 		{
 			dieCoroutine = StartCoroutine(Die());
+		}
+	}
+
+	public override void OnEvent(bulletHitEvent evnt){
+		if(entity.IsOwner){
+			Damaged(evnt.Damage);
 		}
 	}
 
@@ -68,7 +80,7 @@ public class TowerControl : CommonObject
 
 	private void OnMouseOver()
 	{
-		if (targetable && GameManager.instance.playerInfo.team.IsEnemy(towerInfo.team))
+		if (!(targetable && GameManager.instance.playerEntity.GetState<IMinionState>().Team.IsEnemy(state.Team)))
 		{
 			outline.eraseRenderer = false;
 		}

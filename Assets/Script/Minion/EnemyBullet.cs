@@ -10,7 +10,9 @@ public class EnemyBullet : EntityBehaviour<IBulletState>
 	public float bulletSpeed;
 
 	private float damage;
-
+	public override void Attached(){
+		state.SetTransforms(state.Position, transform);
+	}
 	public void Enable(Transform target, Vector3 firstPosition, float damage)
 	{
 		transform.position = firstPosition;
@@ -22,7 +24,7 @@ public class EnemyBullet : EntityBehaviour<IBulletState>
 		transform.SetAsLastSibling();
 	}
 
-	private void Update()
+	public override void SimulateOwner()
 	{
 		if (target != null)
 		{
