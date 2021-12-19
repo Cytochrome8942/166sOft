@@ -55,6 +55,7 @@ public class CharacterAttack : EntityBehaviour<IMinionState>
 	{
 		characterInfo.moveTarget = transform.position;
 		characterMove.MoveLock(characterInfo.attackSpeedBefore, true, true);
+		GetComponent<Animator>().SetTrigger("Attack");
 
 		//�������� �� �ٶ󺸱�
 		Vector3 moveTarget = target.position.YZero();

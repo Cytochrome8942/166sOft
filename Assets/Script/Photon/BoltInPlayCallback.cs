@@ -8,20 +8,17 @@ using System.Collections.Generic;
 
 public class BoltInPlayCallback : GlobalEventListener
 {
-    public GameObject player;
+    public GameObject playerMale;
+    public GameObject playerFemale;
+
     public BoltEntity entity;
     public override void SceneLoadLocalDone(string scene, IProtocolToken token)
     {
-        Vector3 pos = new Vector3(80,0,0);
-        
         if(BoltGameInfo.isBlueTeam){
-            pos = new Vector3(-80,0,0);
-            entity = BoltNetwork.Instantiate(player, pos, Quaternion.identity);
+            entity = BoltNetwork.Instantiate(playerMale, new Vector3(107, 0, 0), Quaternion.identity);
         }
         else{
-            pos = new Vector3(80,0,0);
-            entity = BoltNetwork.Instantiate(player, pos, Quaternion.identity);
+            entity = BoltNetwork.Instantiate(playerFemale, new Vector3(-107, 0, 0), Quaternion.identity);
         }
-
     }
 }

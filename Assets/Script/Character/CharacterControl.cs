@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEditor;
 using Photon.Bolt;
+using System.Threading.Tasks;
 
 public class CharacterControl : CommonObject
 {
@@ -111,7 +112,7 @@ public class CharacterControl : CommonObject
 		characterInfo.exp.add(amount);
 	}
 
-	public void Damaged(float attack, bool isPhysical = true)
+	public async void Damaged(float attack, bool isPhysical = true)
 	{
 		if (isPhysical)
 		{
@@ -124,7 +125,14 @@ public class CharacterControl : CommonObject
 		state.Health = characterInfo.hp.get();
 		if(state.Health <= 0)
 		{
-
+			// 움직임 정지
+			characterMove.MoveLock(10);
+			GetComponent<Animator>().SetTrigger("Die");
+			await Task.Delay(9000);
+			transform.position = state.Team == 0 ? new Vector3(-107, 0, 0) : new Vector3(107, 0, 0);
+			GetComponent<Animator>().SetTrigger("Awake");
+			characterInfo.hp.set(characterInfo.fullHp.get());
+			Camera.main.GetComponent<CameraControl>().Reset();
 		}
 	}
 	public override void OnEvent(bulletHitEvent evnt){
