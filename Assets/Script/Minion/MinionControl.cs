@@ -87,7 +87,7 @@ public class MinionControl : CommonObject
 
 	private void OnMouseOver()
 	{
-		if (!(targetable && GameManager.instance.playerEntity.GetState<IMinionState>().Team.IsEnemy(state.Team)))
+		if (targetable && GameManager.instance.playerEntity.GetState<IMinionState>().Team.IsEnemy(state.Team))
 		{
 			outline.eraseRenderer = false;
 		}
