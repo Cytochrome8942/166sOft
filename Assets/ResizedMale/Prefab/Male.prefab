@@ -682,8 +682,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c40da10b52f47e344800bae952e2be70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fullHp: {fileID: 11400000, guid: b29be693d2df92e4e926c0edc704967f, type: 2}
-  currentHp: {fileID: 11400000, guid: 9e3cf4c74103fe040a1eab8f0e36efd2, type: 2}
   hpBarImage: {fileID: 36060141}
 --- !u!1 &1130981116
 GameObject:
@@ -2393,7 +2391,7 @@ GameObject:
   - component: {fileID: 572383292}
   m_Layer: 0
   m_Name: Male
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2556,7 +2554,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _sceneGuid: 
   _serializerGuid: 7f529cff-e8d5-4fc9-b4b1-d968ce7013fd
-  _prefabId: 3
+  _prefabId: 20
   _updateRate: 1
   _autoFreezeProxyFrames: 0
   _clientPredicted: 1

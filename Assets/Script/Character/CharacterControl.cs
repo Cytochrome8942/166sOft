@@ -18,7 +18,7 @@ public class CharacterControl : CommonObject
     public override void Attached()
 	{
 		characterInfo.Reset();
-		characterInfo.team = (BoltGameInfo.isBlueTeam ? 0 : 1);
+		characterInfo.team = (BoltGameInfo.isBlueTeam ? 1 : 0);
 		state.Team = characterInfo.team;
 		state.MaxHealth = characterInfo.fullHp.get();
 		state.Health = characterInfo.fullHp.get();
@@ -122,18 +122,29 @@ public class CharacterControl : CommonObject
 		{
 			characterInfo.hp.add(- attack.CalculateDamage(characterInfo.magicalDefence.get()));
 		}
+		
 		state.Health = characterInfo.hp.get();
+
 		if(state.Health <= 0)
 		{
 			// 움직임 정지
-			characterMove.MoveLock(10);
-			GetComponent<Animator>().SetTrigger("Die");
-			await Task.Delay(9000);
-			transform.position = state.Team == 0 ? new Vector3(-107, 0, 0) : new Vector3(107, 0, 0);
-			GetComponent<Animator>().SetTrigger("Awake");
-			characterInfo.hp.set(characterInfo.fullHp.get());
-			Camera.main.GetComponent<CameraControl>().Reset();
+			if(targetable)
+			{
+				targetable = false;
+				characterMove.MoveLock(10);
+				GetComponent<Animator>().SetTrigger("Die");
+
+				await Task.Delay(9000);
+				transform.position = ((state.Team == 0) ? new Vector3(-107, 0, 0) : new Vector3(107, 0, 0));
+				GetComponent<Animator>().SetTrigger("Awake");
+
+				characterInfo.hp.set(characterInfo.fullHp.get());
+				Camera.main.GetComponent<CameraControl>().Reset();
+				state.Health = characterInfo.hp.get();
+				targetable = true;
+			}
 		}
+
 	}
 	public override void OnEvent(bulletHitEvent evnt){
 		if(entity.IsOwner){
