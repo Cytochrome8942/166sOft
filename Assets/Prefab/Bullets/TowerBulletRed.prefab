@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8065419152504198034}
   - component: {fileID: 8065419152504198037}
+  - component: {fileID: -8760998145756318900}
+  - component: {fileID: -5303680172451129665}
   m_Layer: 0
   m_Name: TowerBulletRed
   m_TagString: Untagged
@@ -46,6 +48,48 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.44436073, y: 0.4809502, z: 0.83208275}
   m_Center: {x: 0.0025569722, y: 0.028042689, z: 0.12974197}
+--- !u!114 &-8760998145756318900
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8065419152504198032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22b0ebea4ebefd84e92afa0f245658fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletSpeed: 15
+--- !u!114 &-5303680172451129665
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8065419152504198032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 155943207, guid: 5b00bf8b25851d440940a40ec23344f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _sceneGuid: 
+  _serializerGuid: 41b7a074-71ed-4483-96f7-645561b63cff
+  _prefabId: 18
+  _updateRate: 1
+  _autoFreezeProxyFrames: 0
+  _clientPredicted: 1
+  _allowInstantiateOnClient: 1
+  _persistThroughSceneLoads: 0
+  _sceneObjectDestroyOnDetach: 1
+  _sceneObjectAutoAttach: 1
+  _alwaysProxy: 0
+  _detachOnDisable: 1
+  _allowFirstReplicationWhenFrozen: 0
+  _autoRemoveChildEntities: 0
+  _entityBehaviourQueryOption: 0
+  _entityPriorityCalculatorQueryOption: 1
+  _entityReplicationFilterQueryOption: 1
 --- !u!1 &8065419153937824612
 GameObject:
   m_ObjectHideFlags: 0

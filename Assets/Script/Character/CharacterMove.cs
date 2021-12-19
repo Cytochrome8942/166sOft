@@ -22,9 +22,11 @@ public class CharacterMove : EntityBehaviour<IMinionState>
 	public override void Attached()
 	{
 		animator = GetComponent<Animator>();
+		state.SetAnimator(animator);
+		
 		navMeshAgent = GetComponent<NavMeshAgent>();
 		characterAttack = GetComponent<CharacterAttack>();
-		state.SetAnimator(animator);
+		
 		Debug.LogWarning("aaa");
 
 		state.SetTransforms(state.Pos, transform);

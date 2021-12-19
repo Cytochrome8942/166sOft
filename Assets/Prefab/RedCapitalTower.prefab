@@ -452,7 +452,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _sceneGuid: 
   _serializerGuid: 7f529cff-e8d5-4fc9-b4b1-d968ce7013fd
-  _prefabId: 7
+  _prefabId: 8
   _updateRate: 1
   _autoFreezeProxyFrames: 0
   _clientPredicted: 1
@@ -536,6 +536,11 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 404685083486434358, guid: c57b13311b7c9494ca336a51147124d9,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 060705aab144b1d45be6905cefd38ee5, type: 2}
     - target: {fileID: 724282601015028705, guid: c57b13311b7c9494ca336a51147124d9,
         type: 3}
       propertyPath: m_StaticEditorFlags

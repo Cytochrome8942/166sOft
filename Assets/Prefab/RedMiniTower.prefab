@@ -261,7 +261,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _sceneGuid: 
   _serializerGuid: 7f529cff-e8d5-4fc9-b4b1-d968ce7013fd
-  _prefabId: 8
+  _prefabId: 9
   _updateRate: 1
   _autoFreezeProxyFrames: 0
   _clientPredicted: 1
@@ -538,7 +538,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetable: 1
   team: 0
-  nextTarget: {fileID: 0}
+  nextTargets: []
 --- !u!114 &8182482153571297416
 MonoBehaviour:
   m_ObjectHideFlags: 0

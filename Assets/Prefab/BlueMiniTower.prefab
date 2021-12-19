@@ -538,7 +538,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetable: 1
   team: 1
-  nextTarget: {fileID: 0}
+  nextTargets: []
 --- !u!114 &8182482153571297416
 MonoBehaviour:
   m_ObjectHideFlags: 0

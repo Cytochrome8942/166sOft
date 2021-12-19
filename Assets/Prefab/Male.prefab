@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 36060139}
   - component: {fileID: 36060142}
   - component: {fileID: 36060141}
-  - component: {fileID: 36060140}
   m_Layer: 0
   m_Name: fullHp
   m_TagString: Untagged
@@ -76,21 +75,6 @@ MonoBehaviour:
   m_FillOrigin: 1
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &36060140
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 36060138}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd780d935ea38cc45be3115c645fc6fe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fullGauge: {fileID: 36060141}
-  target: {fileID: 11400000, guid: 9e3cf4c74103fe040a1eab8f0e36efd2, type: 2}
-  full: {fileID: 11400000, guid: b29be693d2df92e4e926c0edc704967f, type: 2}
 --- !u!1 &133309668
 GameObject:
   m_ObjectHideFlags: 0
@@ -2554,7 +2538,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _sceneGuid: 
   _serializerGuid: 7f529cff-e8d5-4fc9-b4b1-d968ce7013fd
-  _prefabId: 20
+  _prefabId: 4
   _updateRate: 1
   _autoFreezeProxyFrames: 0
   _clientPredicted: 1

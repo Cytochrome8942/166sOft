@@ -18,7 +18,7 @@ public class EnemyBullet : EntityBehaviour<IBulletState>
 		transform.position = firstPosition;
 		this.target = target;
 		GetComponent<Collider>().enabled = true;
-		GetComponent<MeshRenderer>().enabled = true;
+		//GetComponent<MeshRenderer>().enabled = true;
 		this.damage = damage;
 		gameObject.SetActive(true);
 		transform.SetAsLastSibling();
@@ -67,10 +67,10 @@ public class EnemyBullet : EntityBehaviour<IBulletState>
 
 	private IEnumerator Disable()
 	{
-		target = null;
-		GetComponent<Collider>().enabled = false;
-		GetComponent<MeshRenderer>().enabled = false;
-		yield return new WaitForSeconds(0.3f);
+		//target = null;
+		//GetComponent<Collider>().enabled = false;
+		//GetComponent<MeshRenderer>().enabled = false;
+		yield return new WaitForSeconds(0.1f);
 		BoltEntity.Destroy(gameObject);
 	}
 }

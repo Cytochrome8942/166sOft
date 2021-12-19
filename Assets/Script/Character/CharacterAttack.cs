@@ -17,7 +17,13 @@ public class CharacterAttack : EntityBehaviour<IMinionState>
 
 	//����Ÿ��
 	private Transform target;
-
+	Animator animator;
+	
+	public override void Attached(){
+		animator = GetComponent<Animator>();
+		state.SetAnimator(animator);
+		state.OnisAttacking += attackCallback;
+	}
 	private void Awake()
 	{
 		characterMove = GetComponent<CharacterMove>();
@@ -51,11 +57,15 @@ public class CharacterAttack : EntityBehaviour<IMinionState>
 		this.target = target;
 	}
 
+	public void attackCallback(){
+		animator.SetTrigger("Attack");
+	}
+
 	private IEnumerator AttackTarget()
 	{
 		characterInfo.moveTarget = transform.position;
 		characterMove.MoveLock(characterInfo.attackSpeedBefore, true, true);
-		GetComponent<Animator>().SetTrigger("Attack");
+		state.isAttacking();
 
 		//�������� �� �ٶ󺸱�
 		Vector3 moveTarget = target.position.YZero();

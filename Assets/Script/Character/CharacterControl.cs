@@ -11,12 +11,18 @@ public class CharacterControl : CommonObject
 	public GameObject[] characterSkill;
 
 	public CharacterInfo characterInfo;
+	Animator animator;
 
 	private int layermask = ~(1 << 2);
 
 
     public override void Attached()
 	{
+		animator = GetComponent<Animator>();
+		state.SetAnimator(animator);
+		state.OnIsDead += deadCallback;
+		state.OnisAwake += awakeCallback;
+
 		characterInfo.Reset();
 		characterInfo.team = (BoltGameInfo.isBlueTeam ? 1 : 0);
 		state.Team = characterInfo.team;
@@ -33,6 +39,8 @@ public class CharacterControl : CommonObject
 		GameObject.Find("GameManager").GetComponent<GameManager>().playerEntity = entity;
 	}
 
+	public void deadCallback(){animator.SetTrigger("Die");}
+	public void awakeCallback(){animator.SetTrigger("Awake");}
 
 	public void RightClickInput(Vector3 mousePosition)
 	{
@@ -132,11 +140,11 @@ public class CharacterControl : CommonObject
 			{
 				targetable = false;
 				characterMove.MoveLock(10);
-				GetComponent<Animator>().SetTrigger("Die");
+				state.IsDead();
 
 				await Task.Delay(9000);
 				transform.position = ((state.Team == 0) ? new Vector3(-107, 0, 0) : new Vector3(107, 0, 0));
-				GetComponent<Animator>().SetTrigger("Awake");
+				state.isAwake();
 
 				characterInfo.hp.set(characterInfo.fullHp.get());
 				Camera.main.GetComponent<CameraControl>().Reset();
